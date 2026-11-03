@@ -1,0 +1,12 @@
+{
+  "config": {
+    "default": true,
+    "MD013": false,
+    "MD010": { "code_blocks": false },
+    "MD033": false,
+    "MD041": false,
+    "MD025": false
+  },
+  "globs": ["docs/**/*.{md,mdx}", "README.md", "CONTENT_CHECKLIST.md"],
+  "ignores": ["node_modules"]
+}

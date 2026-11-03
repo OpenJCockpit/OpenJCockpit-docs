@@ -1,0 +1,25 @@
+/* Colours follow the OpenJCockpit docs site so both feel like one family. */
+:root {
+  --ifm-color-primary: #2f6feb;
+  --ifm-color-primary-dark: #1b61ea;
+  --ifm-color-primary-darker: #1359e0;
+  --ifm-color-primary-darkest: #1048b8;
+  --ifm-color-primary-light: #4a80ee;
+  --ifm-color-primary-lighter: #5a8af0;
+  --ifm-color-primary-lightest: #82a8f4;
+  --ifm-code-font-size: 95%;
+  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.1);
+}
+
+[data-theme='dark'] {
+  --ifm-color-primary: #6fa4ff;
+  --ifm-color-primary-dark: #4d8eff;
+  --ifm-color-primary-darker: #3c83ff;
+  --ifm-color-primary-darkest: #0f62ff;
+  --ifm-color-primary-light: #91baff;
+  --ifm-color-primary-lighter: #a2c5ff;
+  --ifm-color-primary-lightest: #d4e4ff;
+  --ifm-background-color: #0e1116;
+  --ifm-background-surface-color: #151922;
+  --docusaurus-highlighted-code-line-bg: rgba(255, 255, 255, 0.08);
+}

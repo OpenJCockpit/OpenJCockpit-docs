@@ -1,0 +1,104 @@
+---
+title: Approval gates
+description: Pause a workflow after an agent, review what it changed, and accept, deny or send it back with comments.
+sidebar_position: 3
+estimated_time: 20 minutes
+difficulty: intermediate
+openjcockpit_version: develop
+---
+
+# Approval gates
+
+## What you will build
+
+You will add an approval gate to the **Implement spec** workflow so the run pauses after the Software
+Developer. You then review the changed files and decide: accept, deny, or accept with comments.
+
+<Prerequisites
+  items={[
+    <>
+      Finished{" "}
+      <a href="first-spec-driven-change">your first spec-driven change</a>
+    </>,
+    "Access to Workflow Design in the dashboard",
+  ]}
+/>
+
+<VersionBanner version="develop (draft, not yet verified on a clean machine)" />
+<ModelNote />
+
+<WrittenAndVideo videoTitle="Approval gates: a human decision inside the run">
+
+## Steps
+
+### 1. Open Workflow Design
+
+Find **Implement spec** and open it. The default workflows have **no gate** configured. You add one
+where you want a human decision.
+
+### 2. Anchor a gate to the Software Developer
+
+Add an approval gate and anchor it to the Software Developer agent. A gate always belongs to an agent
+in the workflow, and the run pauses right after that agent finishes.
+
+<Checkpoint>The workflow shows a gate after the Software Developer.</Checkpoint>
+
+### 3. Start the workflow on spec 002
+
+Start **Implement spec** on `002-validate-book-input`. The architect and the developer run, then the
+run stops with status `AWAITING_APPROVAL`.
+
+### 4. Review the approval context
+
+The dashboard shows the gate context, including the files the developer changed. Open the branch and
+compare the diff with the spec's acceptance criteria.
+
+<Checkpoint>
+  The run is parked and the approval view lists the changed files. The QA
+  Engineer has not run yet.
+</Checkpoint>
+
+### 5. Decide
+
+| Decision                 | What happens                                                                                   |
+| ------------------------ | ---------------------------------------------------------------------------------------------- |
+| **Accept**               | The run continues with the QA Engineer                                                         |
+| **Deny**                 | The run ends                                                                                   |
+| **Accept with comments** | The developer runs again with your feedback and its previous output, then the gate opens again |
+
+Try **accept with comments** once, for example: "Also add a test for an author longer than 100
+characters." Then accept the second version.
+
+<Checkpoint>
+  The run finishes, and the decision, including your comment, is recorded in the
+  approval audit trail.
+</Checkpoint>
+
+</WrittenAndVideo>
+
+## What just happened
+
+The gate parked the run in the database, so it survives a restart of the service. Your decision was
+recorded durably, and exactly one decision wins even if two people click at once.
+
+Know the limits before you rely on this:
+
+- **Feedback loops cost money and time.** Each comment re-runs the agent. The default maximum is 3
+  loops per gate (`APPROVAL_GATE_MAX_FEEDBACK_ITERATIONS`), and it is the only cost control.
+- **Any signed-in user can approve.** There is no role restriction on who may decide at a gate.
+- **A job times out while waiting.** A run on a project stops after `WORKFLOW_AGENT_TIMEOUT`
+  (3600 s locally), even while a gate is open.
+- **Runs that were executing during a restart are lost.** Only runs parked at a gate resume.
+
+See the product [approval gates runbook](https://github.com/OpenJCockpit/OpenJCockpit/blob/main/docs/readme/governance/approval-gates.md)
+and [known limitations](https://github.com/OpenJCockpit/OpenJCockpit/blob/main/docs/readme/operations/known-limitations.md).
+
+## Troubleshooting
+
+- The dashboard shows "run state lost": the service restarted while an agent was executing. Start the
+  workflow again.
+- Accepting returns `409`: someone else already decided.
+
+## Next steps
+
+[Policy as code](policy-as-code.mdx) controls what agents may do before a human is even involved.

@@ -1,0 +1,38 @@
+import type {SidebarsConfig} from '@docusaurus/plugin-content-docs';
+
+// Order follows the learning path: Intro, Getting started, Tutorials, Concepts, Workshops.
+const sidebars: SidebarsConfig = {
+  learningSidebar: [
+    'intro',
+    {
+      type: 'category',
+      label: 'Getting started',
+      collapsed: false,
+      items: ['getting-started/quickstart', 'getting-started/troubleshooting'],
+    },
+    {
+      type: 'category',
+      label: 'Tutorials',
+      items: [
+        'tutorials/index',
+        'tutorials/first-spec-driven-change',
+        'tutorials/approval-gates',
+        'tutorials/policy-as-code',
+        'tutorials/custom-agent',
+        'tutorials/bring-your-own-model',
+      ],
+    },
+    {
+      type: 'category',
+      label: 'Concepts',
+      items: ['concepts/credential-isolation', 'concepts/glossary'],
+    },
+    {
+      type: 'category',
+      label: 'Workshops',
+      items: ['workshops/index'],
+    },
+  ],
+};
+
+export default sidebars;

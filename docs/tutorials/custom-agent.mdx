@@ -1,0 +1,131 @@
+---
+title: Build a custom agent
+description: Define a read-only Code Reviewer agent in Markdown and add it to a workflow.
+sidebar_position: 5
+estimated_time: 30 minutes
+difficulty: intermediate
+openjcockpit_version: develop
+---
+
+# Build a custom agent
+
+## What you will build
+
+You will write a **Code Reviewer** agent as one Markdown file, see it appear in the agent catalogue, and
+add it to a workflow after the QA Engineer. It reads the change and reports findings, and cannot change
+any file.
+
+<Prerequisites
+  items={[
+    <>
+      The running stack from the{" "}
+      <a href="../getting-started/quickstart">Quickstart</a>
+    </>,
+    <>
+      A checkout of <code>OpenJCockpit</code>, because local agents live in its{" "}
+      <code>agents/</code> folder
+    </>,
+    <>
+      Finished <a href="approval-gates">approval gates</a>, to be comfortable in
+      Workflow Design
+    </>,
+  ]}
+/>
+
+<VersionBanner version="develop (draft, not yet verified on a clean machine)" />
+<ModelNote />
+
+<WrittenAndVideo videoTitle="Build a custom agent in ten minutes">
+
+## Steps
+
+### 1. Write the agent
+
+An agent is one Markdown file: YAML front matter, then the instructions. Save this as
+`agents/code-reviewer.md` in your `OpenJCockpit` checkout, or
+[download it](pathname:///openJCockpit-education/downloads/agents/code-reviewer.md).
+
+```markdown
+---
+id: code-reviewer
+name: "Code Reviewer"
+version: "1.0.0"
+description: "Reviews a change against its spec and reports findings without changing code"
+model: agent-chat
+guardrails:
+  - pii-protection
+tools:
+  - git.list_files
+  - git.read_file
+---
+
+# Role
+
+You are a Code Reviewer in a software delivery team.
+
+# Rules
+
+- You are read-only. Never write or change files.
+```
+
+(The download has the full instructions.) The front matter fields:
+
+| Field        | Meaning                                                                           |
+| ------------ | --------------------------------------------------------------------------------- |
+| `id`         | Required. Lowercase kebab-case, unique in the folder                              |
+| `version`    | Required                                                                          |
+| `model`      | Required. A configured model alias. `agent-chat` is the one the seeded agents use |
+| `tools`      | Tool ids. Only the two read tools here, so the agent cannot write                 |
+| `guardrails` | `pii-protection` checks the LLM input and output and fails closed                 |
+
+### 2. Find it in the catalogue
+
+The `agents/` folder is mounted read-only at `/agents`. Open **Workflow design → Agents → Local**.
+
+<Checkpoint>
+  <code>Code Reviewer</code> is listed under Local with the reference{" "}
+  <code>local:code-reviewer</code>. An invalid file is still listed, marked with
+  the problem.
+</Checkpoint>
+
+### 3. Add it to a workflow
+
+In Workflow Design, copy **Implement spec** and add `local:code-reviewer` after the QA Engineer. Save
+it under a new name so the defaults stay untouched.
+
+### 4. Run it on spec 002
+
+Start your workflow on `002-validate-book-input` and read the reviewer's output on the run.
+
+<Checkpoint>
+  The reviewer's output lists findings tied to acceptance criteria and ends with{" "}
+  <code>APPROVE</code> or <code>CHANGES REQUESTED</code>. The run's branch has
+  no commit from the reviewer that changes files.
+</Checkpoint>
+
+</WrittenAndVideo>
+
+## What just happened
+
+A new role joined the workflow without any Java code. Tool access is granted server-side: it needs both
+the agent definition and the tenant binding's allowlist, and every call is checked again at call time,
+including by OPA. Text in the instructions never grants a tool. That is why "you are read-only" in the
+prompt is a request, while omitting `git.write_file` from `tools` is the control.
+
+You can go further. Add a policy rule like the one in [policy as code](policy-as-code.mdx), or serve
+agents from another provider over the Agent2Agent (A2A) protocol. See the product docs on
+[agents and A2A](https://github.com/OpenJCockpit/OpenJCockpit/blob/main/docs/readme/integrations/a2a-agents.md).
+
+Limits: A2A support is version 0.3 and `message/send` only. The default `agents/` folder is read-only
+inside the container, so edit files on the host.
+
+## Troubleshooting
+
+- The agent is listed with a problem: check that `id` is lowercase kebab-case and `version` and `model`
+  are set.
+- The agent cannot read files: the tool must also be allowed by the tenant binding. Check the decision
+  log with `docker compose logs opa`.
+
+## Next steps
+
+[Bring your own model](bring-your-own-model.mdx) changes which LLM the agents call.

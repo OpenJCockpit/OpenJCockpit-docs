@@ -91,6 +91,7 @@ const config: Config = {
         docs: {
           routeBasePath: 'learn',
           sidebarPath: './sidebars.ts',
+          showLastUpdateTime: true,
           editUrl:
             'https://github.com/OpenJCockpit/OpenJCockpit-docs/tree/main/',
         },

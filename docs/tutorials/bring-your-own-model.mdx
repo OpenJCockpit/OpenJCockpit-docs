@@ -1,5 +1,6 @@
 ---
-title: Bring your own model
+title: "Bring your own model: switch the Ollama model every agent uses"
+sidebar_label: Bring your own model
 description: Switch the local Ollama model that every agent uses, and understand what a hosted model would change.
 sidebar_position: 6
 estimated_time: 20 minutes
@@ -34,7 +35,7 @@ change reached the gateway. You also learn why a hosted model is not a one-line 
 
 ## How models are wired
 
-Agents never name a model directly. They name an **alias** such as `agent-chat`, and the LiteLLM
+Agents never name a model directly. They name an **[alias](/learn/concepts/glossary#alias-model)** such as `agent-chat`, and the [LiteLLM](/learn/concepts/glossary#litellm)
 gateway maps each alias to an upstream model.
 
 ```mermaid

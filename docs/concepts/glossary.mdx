@@ -1,0 +1,40 @@
+---
+title: Glossary
+description: Short definitions of the OpenJCockpit terms used across this site.
+sidebar_position: 3
+---
+
+# Glossary
+
+Short definitions. Each links to the [reference](/reference), the single source of truth.
+
+| Term                        | Meaning                                                                                                                                                                                                  |
+| --------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| <Term id="a2a">A2A</Term>                     | Agent2Agent protocol. Agents served by a provider gateway such as LiteLLM, referenced as `a2a:<provider>:<agent>`. See [agents](/reference/integrations/a2a-agents).                                     |
+| <Term id="agent">Agent</Term>                   | A role-based AI agent with a model alias, instructions, skills, tools and guardrails. Local agents are Markdown files and are referenced as `local:<id>`.                                                |
+| <Term id="agent-catalogue">Agent catalogue</Term>         | The list of agents a workflow can use: local agents plus one section per A2A provider.                                                                                                                   |
+| <Term id="alias-model">Alias (model)</Term>           | A name such as `agent-chat` that agents use instead of a model tag. LiteLLM maps it to an upstream model.                                                                                                |
+| <Term id="approval-gate">Approval gate</Term>           | A human decision point inside a run: accept, deny or accept with comments. See [approval gates](/reference/governance/approval-gates).                                                                   |
+| <Term id="audit-trail">Audit trail</Term>             | Recorded policy decisions and approval decisions, stored as files in a Docker volume.                                                                                                                    |
+| <Term id="checkpoint">Checkpoint</Term>              | A commit made on the run's branch after each agent finishes.                                                                                                                                             |
+| <Term id="dashboard">Dashboard</Term>               | The OpenJCockpit web UI (React, behind Keycloak login) where you pick a project, design and start workflows, follow runs and take approval decisions. Use "dashboard", not "AI Orchestration Dashboard". |
+| <Term id="embabel-agent-runtime">Embabel agent runtime</Term>   | The service (`embabel-agent-runtime`) that executes configuration-driven agents and serves the inbound A2A endpoints. Tenant bindings, workflow runs and OPA decisions stay in `embabel-agent-service`.  |
+| <Term id="fail-closed">Fail closed</Term>             | When a control cannot decide, such as OPA unreachable or a missing guardrail, the action is blocked rather than allowed.                                                                                 |
+| <Term id="git-workspace">Git workspace</Term>           | The per-run clone of the project repository that agents read and write through the Git MCP server, on a branch created for that run.                                                                     |
+| <Term id="guardrail">Guardrail</Term>               | A check on LLM input and output, such as `pii-protection`.                                                                                                                                               |
+| <Term id="keycloak">Keycloak</Term>                | The identity provider. It issues the JWTs that the dashboard and services use, including the `tenant_id` claim.                                                                                          |
+| <Term id="litellm">LiteLLM</Term>                 | The gateway between agents and models. It also serves agents over A2A and fronts the Git MCP server.                                                                                                     |
+| <Term id="mcp">MCP</Term>                     | Model Context Protocol. How agents call tools such as the Git tools.                                                                                                                                     |
+| <Term id="mock-skills-marketplace">Mock Skills Marketplace</Term> | The development-only stand-in for an external Skills Marketplace, enabled by an opt-in Compose file. Not for deployed environments.                                                                      |
+| <Term id="opa">OPA</Term>                     | Open Policy Agent. Evaluates the Rego policy for workflow starts, agents and every tool call.                                                                                                            |
+| <Term id="openjcockpit">OpenJCockpit</Term>            | The product. Tagline: "the open-source AI Software Factory" for governed agentic software development.                                                                                                   |
+| <Term id="policy">Policy</Term>                  | OPA rules in `infrastructure/opa/policies/`. See [policy enforcement](/reference/governance/policy-enforcement).                                                                                         |
+| <Term id="project">Project</Term>                 | A software project with its Git repository and credentials.                                                                                                                                              |
+| <Term id="skill">Skill</Term>                   | A reusable instruction package for agents.                                                                                                                                                               |
+| <Term id="skills-hub">Skills Hub</Term>              | The dashboard area where you browse skills and register Skills Marketplace connections.                                                                                                                  |
+| <Term id="skills-marketplace">Skills Marketplace</Term>      | An external skills catalogue that the Skills Hub can connect to. The integration is early: placeholder contract, development-only mock.                                                                  |
+| <Term id="spec">Spec</Term>                    | Markdown specification with requirements and acceptance criteria, stored in the project's `specs/` folder. See [spec-driven development](/reference/workflows/spec-driven-development).                  |
+| <Term id="spec-queue">Spec queue</Term>              | A per-project queue that runs specs one at a time.                                                                                                                                                       |
+| <Term id="tenant">Tenant</Term>                  | The customer or organisation an agent run belongs to, taken from the JWT claim `tenant_id` and matched against the tenant binding.                                                                       |
+| <Term id="tool">Tool</Term>                    | A capability an agent may call, granted server-side and checked on every call.                                                                                                                           |
+| <Term id="workflow">Workflow</Term>                | An ordered chain of agents, optionally with approval gates.                                                                                                                                              |

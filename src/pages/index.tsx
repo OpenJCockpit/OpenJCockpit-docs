@@ -5,6 +5,7 @@ import clsx from "clsx";
 import Link from "@docusaurus/Link";
 import useBaseUrl from "@docusaurus/useBaseUrl";
 import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
+import Head from "@docusaurus/Head";
 import Layout from "@theme/Layout";
 import Heading from "@theme/Heading";
 
@@ -14,23 +15,31 @@ const PuffsBackground = lazy(
   () => import("@site/src/components/PuffsBackground"),
 );
 
+// Docusaurus appends " | OpenJCockpit Docs".
+const HOME_TITLE = "Governed, spec-driven AI software development";
+const HOME_DESCRIPTION =
+  "Learn, build and operate OpenJCockpit, the open-source AI software factory: spec-driven changes, approval gates, policy as code and reviewable agent delivery.";
+
 const pillars = [
   {
     title: "Specs, not prompts",
     text: "Requirements and acceptance criteria live in your repository and drive every change.",
     to: "/learn/intro",
+    cta: "What is OpenJCockpit?",
     icon: "M7 3h8l4 4v14H7zM15 3v4h4M10 12h6M10 16h6",
   },
   {
     title: "Humans stay in control",
     text: "Approval gates and policy as code decide what agents may do and when a person signs off.",
     to: "/learn/tutorials",
+    cta: "Approval gates tutorial",
     icon: "M12 3l8 3v6c0 4.5-3.2 7.8-8 9-4.8-1.2-8-4.5-8-9V6zM9 12l2 2 4-4",
   },
   {
     title: "Reviewable delivery",
     text: "Agents work in a branch with checkpoints. You review a pull request, as always.",
     to: "/learn/getting-started/quickstart",
+    cta: "Quickstart with Docker Compose",
     icon: "M6 3v12M6 15a3 3 0 100 6 3 3 0 000-6zM18 9a3 3 0 100-6 3 3 0 000 6zM18 9c0 6-12 3-12 6",
   },
 ];
@@ -148,8 +157,36 @@ function HomepageHeader() {
 
 export default function Home(): ReactNode {
   const { siteConfig } = useDocusaurusContext();
+  const base = siteConfig.url + siteConfig.baseUrl;
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebSite",
+        "@id": `${base}#website`,
+        name: siteConfig.title,
+        url: base,
+        description: HOME_DESCRIPTION,
+        inLanguage: "en",
+      },
+      {
+        "@type": "SoftwareApplication",
+        "@id": `${base}#software`,
+        name: "OpenJCockpit",
+        applicationCategory: "DeveloperApplication",
+        operatingSystem: "Linux, macOS, Windows (Docker)",
+        description: HOME_DESCRIPTION,
+        url: base,
+        isAccessibleForFree: true,
+        sameAs: ["https://github.com/OpenJCockpit/OpenJCockpit"],
+      },
+    ],
+  };
   return (
-    <Layout title={siteConfig.title} description={siteConfig.tagline}>
+    <Layout title={HOME_TITLE} description={HOME_DESCRIPTION}>
+      <Head>
+        <script type="application/ld+json">{JSON.stringify(jsonLd)}</script>
+      </Head>
       <HomepageHeader />
       <main className="container margin-vert--lg">
         <div className="row">
@@ -193,7 +230,7 @@ export default function Home(): ReactNode {
                 <Icon path={p.icon} />
                 <Heading as="h3">{p.title}</Heading>
                 <p>{p.text}</p>
-                <Link to={p.to}>Learn more</Link>
+                <Link to={p.to}>{p.cta}</Link>
               </div>
             </div>
           ))}

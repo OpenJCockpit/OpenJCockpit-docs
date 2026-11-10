@@ -43,7 +43,7 @@ any file.
 
 An agent is one Markdown file: YAML front matter, then the instructions. Save this as
 `agents/code-reviewer.md` in your `OpenJCockpit` checkout, or
-[download it](pathname:///openJCockpit-education/downloads/agents/code-reviewer.md).
+[download it](pathname:///OpenJCockpit-docs/downloads/agents/code-reviewer.md).
 
 ```markdown
 ---
@@ -114,7 +114,7 @@ prompt is a request, while omitting `git.write_file` from `tools` is the control
 
 You can go further. Add a policy rule like the one in [policy as code](policy-as-code.mdx), or serve
 agents from another provider over the Agent2Agent (A2A) protocol. See the product docs on
-[agents and A2A](https://github.com/OpenJCockpit/OpenJCockpit/blob/main/docs/readme/integrations/a2a-agents.md).
+[agents and A2A](/reference/integrations/a2a-agents).
 
 Limits: A2A support is version 0.3 and `message/send` only. The default `agents/` folder is read-only
 inside the container, so edit files on the host.

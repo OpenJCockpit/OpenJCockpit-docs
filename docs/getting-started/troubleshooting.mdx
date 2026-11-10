@@ -6,9 +6,8 @@ sidebar_position: 2
 
 # Troubleshooting
 
-Entries come from the product
-[troubleshooting guide](https://github.com/OpenJCockpit/OpenJCockpit/blob/main/docs/readme/operations/troubleshooting.md)
-and will be extended with the snags that actually occur while recording the tutorials.
+The snags you are most likely to hit while following the quickstart. The product
+[troubleshooting reference](/reference/operations/troubleshooting) has the complete list.
 
 ## Starting the stack
 
@@ -18,14 +17,15 @@ and will be extended with the snags that actually occur while recording the tuto
 | Login redirects to `:3000` or "invalid redirect" | Keycloak still holds an old realm                | Re-import the realm, see the product authentication guide |
 | LLM calls fail with `401` from the gateway       | Wrong `LITELLM_VIRTUAL_KEY`, or seed did not run | `docker compose logs local-seed`                          |
 
-## Running workflows
+## First workflow run
 
-| Symptom                                                          | Likely cause                                | What to do                                                    |
-| ---------------------------------------------------------------- | ------------------------------------------- | ------------------------------------------------------------- |
-| Health is `UP`, but every agent run fails                        | Ollama not running or model not pulled      | `ollama list` must show `qwen3.6:27b`                         |
-| Runs fail after setting `OLLAMA_BASE_URL=http://localhost:11434` | `.env` applies inside the container         | Remove the override or use an address the container can reach |
-| Runs take very long or time out                                  | Large local model, several agents           | Expected. Jobs wait up to 3600 s                              |
-| A job fails to start its container                               | Job image not pulled                        | `docker pull eclipse-temurin:25-jre`                          |
-| A start on a project returns `502`                               | Clone failed                                | Check the project URL and Settings → Git credentials          |
-| A workflow start returns `BLOCKED`                               | No agents linked, or denied by policy       | Read the reason, check `docker compose logs opa`              |
-| The dashboard shows "run state lost"                             | Unknown run id or service restart mid-agent | Start the workflow again                                      |
+| Symptom                                                          | Likely cause                           | What to do                                                    |
+| ---------------------------------------------------------------- | -------------------------------------- | ------------------------------------------------------------- |
+| Health is `UP`, but every agent run fails                        | Ollama not running or model not pulled | `ollama list` must show `qwen3.6:27b`                         |
+| Runs fail after setting `OLLAMA_BASE_URL=http://localhost:11434` | `.env` applies inside the container    | Remove the override or use an address the container can reach |
+| A job fails to start its container                               | Job image not pulled                   | `docker pull eclipse-temurin:25-jre`                          |
+
+## Everything else
+
+Policy blocks, `502` errors and "run state lost" are covered in the full
+[troubleshooting reference](/reference/operations/troubleshooting).

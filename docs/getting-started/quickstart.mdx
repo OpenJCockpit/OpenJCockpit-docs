@@ -9,6 +9,11 @@ openjcockpit_version: develop
 
 # Quickstart
 
+:::info Reference version
+This is the guided path: a local Ollama model, step by step, with checkpoints. The product
+[quickstart](/reference/getting-started/quickstart) is the concise reference for the same stack.
+:::
+
 ## What you will build
 
 You will run the complete OpenJCockpit stack on your own machine and sign in to the AI Orchestration
@@ -107,7 +112,7 @@ seeded local user.
 <LocalOnlyWarning />
 
 The seeded users and their passwords are listed in the product
-[authentication guide](https://github.com/OpenJCockpit/OpenJCockpit/blob/main/docs/readme/getting-started/authentication.md).
+[authentication guide](/reference/getting-started/authentication).
 Use `tony`, who also has the `openjcockpit-admin` role.
 
 <Checkpoint>
@@ -130,9 +135,11 @@ docker pull eclipse-temurin:25-jre
 Docker Compose started Keycloak (identity), PostgreSQL, the LiteLLM gateway, OPA (policy) and the Java
 services. The dashboard is a separate application that talks to them over host ports. Ollama serves
 the coding model for every agent. For the architecture, see the product
-[overview](https://github.com/OpenJCockpit/OpenJCockpit/blob/main/docs/readme/concepts/overview.md).
+[overview](/reference/concepts/overview).
 
 ## Stop, restart and reset
+
+The [runbooks](/reference/operations/runbooks) describe every service, volume and destructive command.
 
 | Command                  | Effect                                                 |
 | ------------------------ | ------------------------------------------------------ |

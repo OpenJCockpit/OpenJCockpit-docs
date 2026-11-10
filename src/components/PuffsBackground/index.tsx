@@ -1,0 +1,263 @@
+import { useEffect, useRef, useState } from "react";
+import type { CSSProperties } from "react";
+import clsx from "clsx";
+import styles from "./styles.module.css";
+
+// Ported from OpenJCockpit-frontend libs/ui/src/backgrounds/PuffsBackground.tsx.
+// Respects prefers-reduced-motion (one static frame) and pauses when the tab is hidden.
+
+function usePrefersReducedMotion(): boolean {
+  const [reduced, setReduced] = useState(false);
+  useEffect(() => {
+    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
+    setReduced(mq.matches);
+    const onChange = (e: MediaQueryListEvent) => setReduced(e.matches);
+    mq.addEventListener("change", onChange);
+    return () => mq.removeEventListener("change", onChange);
+  }, []);
+  return reduced;
+}
+
+type Range = [number, number];
+
+type Puff = {
+  x: number;
+  y: number;
+  r: number;
+  xo: number;
+  yo: number;
+  ro: number;
+};
+
+type PuffSettings = {
+  padding: number;
+  xOffset: Range;
+  yOffset: Range;
+  radiusInitial: number;
+  radiusOffset: Range;
+};
+
+type PuffFieldSettings = PuffSettings & { quantity: number; sets: number };
+
+type PuffsBackgroundProps = {
+  color?: string;
+  quantity?: number;
+  sets?: number;
+  padding?: number;
+  xOffset?: Range;
+  yOffset?: Range;
+  radiusInitial?: number;
+  radiusOffset?: Range;
+  cycleSeconds?: number;
+  fadeInSeconds?: number;
+  className?: string;
+};
+
+const outSine = (x: number) => Math.sin((x * Math.PI) / 2);
+const minmaxOverflow01 = (value: number) =>
+  Math.min(1, Math.max(0, value === 1 ? 1 : value % 1));
+
+/** Pure function: create one puff's static parameters for a WxH field. */
+export function createPuff(
+  width: number,
+  height: number,
+  { padding, xOffset, yOffset, radiusInitial, radiusOffset }: PuffSettings,
+): Puff {
+  const x = padding + Math.random() * (width - padding * 2);
+  const y = padding + Math.random() * (height - padding * 2);
+  const xo = xOffset[0] + Math.random() * xOffset[1];
+  const yo = yOffset[0] + Math.random() * yOffset[1];
+  const ro = radiusOffset[0] + Math.random() * radiusOffset[1];
+  return { x, y, r: radiusInitial, xo, yo, ro };
+}
+
+/**
+ * Pure function: seed `sets` groups of puffs (quantity / sets per group,
+ * rounded) for a WxH field. Exported standalone so it is unit-testable by
+ * inspection the day a landing test harness is added (O-2).
+ */
+export function seedPuffFields(
+  width: number,
+  height: number,
+  settings: PuffFieldSettings,
+): Puff[][] {
+  const { quantity, sets } = settings;
+  const perSet = Math.round(quantity / sets);
+  return Array.from({ length: sets }, () =>
+    Array.from({ length: perSet }, () => createPuff(width, height, settings)),
+  );
+}
+
+export default function PuffsBackground({
+  color = "hsl(184 100% 58% / 0.26)",
+  quantity = 85,
+  sets = 5,
+  padding = 0,
+  xOffset = [0, 80],
+  yOffset = [-10, -90],
+  radiusInitial = 4,
+  radiusOffset = [1, 9],
+  cycleSeconds = 2,
+  fadeInSeconds = 1.4,
+  className,
+}: PuffsBackgroundProps) {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const [visible, setVisible] = useState(false);
+  const reducedMotion = usePrefersReducedMotion();
+
+  // Settings are read through a ref inside the effect so that prop
+  // identity churn on every parent re-render (e.g. inline array literals
+  // at the call site) does not tear down and re-seed the puff field or
+  // restart the animation loop — only a genuine reduced-motion change does.
+  const settingsRef = useRef<(PuffFieldSettings & { color: string }) | null>(
+    null,
+  );
+  settingsRef.current = {
+    color,
+    quantity,
+    sets,
+    padding,
+    xOffset,
+    yOffset,
+    radiusInitial,
+    radiusOffset,
+  };
+
+  useEffect(() => {
+    const canvas = canvasRef.current!;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) {
+      return undefined;
+    }
+
+    let disposed = false;
+    let puffSets: Puff[][] = [];
+    let rafId: number | null = null;
+    let startTimestamp: number | null = null;
+
+    const resize = () => {
+      const dpr = Math.min(window.devicePixelRatio || 2, 2);
+      const { width, height } = canvas.getBoundingClientRect();
+      if (canvas.width !== width * dpr || canvas.height !== height * dpr) {
+        canvas.width = width * dpr;
+        canvas.height = height * dpr;
+      }
+      ctx.setTransform(1, 0, 0, 1, 0, 0);
+      ctx.scale(dpr, dpr);
+      puffSets = seedPuffFields(
+        width,
+        height,
+        settingsRef.current as PuffFieldSettings,
+      );
+    };
+
+    const drawPuffs = (puffs: Puff[], progress: number) => {
+      const { color: fillColor } = settingsRef.current as { color: string };
+      ctx.globalAlpha = progress <= 0.5 ? progress * 2 : -2 * progress + 2;
+      puffs.forEach((puff) => {
+        const x = puff.x + progress * puff.xo;
+        const y = puff.y + progress * puff.yo;
+        const r = puff.r + progress * puff.ro;
+        const gradient = ctx.createRadialGradient(x, y, 0, x, y, r);
+        gradient.addColorStop(0, fillColor);
+        gradient.addColorStop(1, "transparent");
+        ctx.beginPath();
+        ctx.fillStyle = gradient;
+        ctx.arc(x, y, r, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.closePath();
+      });
+    };
+
+    const draw = (progress: number) => {
+      const { sets: setCount } = settingsRef.current as { sets: number };
+      const setOffset = 1 / setCount;
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      puffSets.forEach((puffs, index) => {
+        const puffsProgress = minmaxOverflow01(progress + setOffset * index);
+        drawPuffs(puffs, outSine(puffsProgress));
+      });
+    };
+
+    const stopLoop = () => {
+      if (rafId !== null) {
+        window.cancelAnimationFrame(rafId);
+        rafId = null;
+      }
+      startTimestamp = null;
+    };
+
+    const tick = (timestamp: number) => {
+      if (disposed) {
+        return;
+      }
+      if (startTimestamp === null) {
+        startTimestamp = timestamp;
+      }
+      const elapsedSeconds = (timestamp - startTimestamp) / 1000;
+      const progress = (elapsedSeconds % cycleSeconds) / cycleSeconds;
+      draw(progress);
+      rafId = window.requestAnimationFrame(tick);
+    };
+
+    const startLoop = () => {
+      stopLoop();
+      rafId = window.requestAnimationFrame(tick);
+    };
+
+    resize();
+
+    if (reducedMotion) {
+      draw(1);
+    } else {
+      startLoop();
+    }
+
+    const resizeObserver = new ResizeObserver(() => {
+      resize();
+      if (reducedMotion) {
+        draw(1);
+      }
+    });
+    resizeObserver.observe(canvas);
+
+    const handleVisibilityChange = () => {
+      if (document.hidden) {
+        stopLoop();
+      } else if (!reducedMotion) {
+        startLoop();
+      }
+    };
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+
+    return () => {
+      disposed = true;
+      stopLoop();
+      resizeObserver.disconnect();
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+    };
+  }, [reducedMotion, cycleSeconds]);
+
+  useEffect(() => {
+    if (reducedMotion) {
+      setVisible(true);
+      return undefined;
+    }
+    const rafId = window.requestAnimationFrame(() => setVisible(true));
+    return () => window.cancelAnimationFrame(rafId);
+  }, [reducedMotion]);
+
+  return (
+    <canvas
+      ref={canvasRef}
+      aria-hidden="true"
+      role="presentation"
+      className={clsx(
+        styles.puffsBackground,
+        visible && styles.isVisible,
+        className,
+      )}
+      style={{ "--puffs-fade-duration": `${fadeInSeconds}s` } as CSSProperties}
+    />
+  );
+}

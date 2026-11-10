@@ -1,25 +1,267 @@
-/* Colours follow the OpenJCockpit docs site so both feel like one family. */
+@import "./tokens.css";
+
+/* Map the OpenJCockpit tokens (tokens.css) onto Infima. */
 :root {
-  --ifm-color-primary: #2f6feb;
-  --ifm-color-primary-dark: #1b61ea;
-  --ifm-color-primary-darker: #1359e0;
-  --ifm-color-primary-darkest: #1048b8;
-  --ifm-color-primary-light: #4a80ee;
-  --ifm-color-primary-lighter: #5a8af0;
-  --ifm-color-primary-lightest: #82a8f4;
+  --ifm-font-family-base: var(--font-sans);
+  --ifm-font-family-monospace:
+    var(--font-mono), SFMono-Regular, Menlo, Consolas, monospace;
+  --ifm-heading-font-weight: 650;
+  --ifm-font-color-base: var(--text);
+  --ifm-font-color-secondary: var(--muted);
+  --ifm-color-primary: var(--cyan);
+  --ifm-color-primary-dark: rgb(var(--accent-rgb) / 0.9);
+  --ifm-color-primary-darker: rgb(var(--accent-rgb) / 0.85);
+  --ifm-color-primary-darkest: rgb(var(--accent-rgb) / 0.75);
+  --ifm-color-primary-light: var(--cyan);
+  --ifm-color-primary-lighter: var(--cyan);
+  --ifm-color-primary-lightest: var(--cyan);
+  --ifm-link-color: var(--cyan);
+  --ifm-color-success: var(--teal);
+  --ifm-color-info: var(--blue);
+  --ifm-color-warning: var(--warn);
+  --ifm-color-danger: var(--danger);
+  --ifm-background-color: transparent;
+  --ifm-background-surface-color: var(--surface-strong);
+  --ifm-color-emphasis-200: var(--line);
+  --ifm-color-emphasis-300: var(--line);
+  --ifm-color-content-secondary: var(--muted);
+  --ifm-global-radius: var(--radius-md);
+  --ifm-card-border-radius: var(--radius-lg);
+  --ifm-button-border-radius: var(--radius-md);
+  --ifm-navbar-height: 82px;
+  --ifm-navbar-background-color: var(--shell-bar-bg);
+  --ifm-navbar-shadow: none;
+  --ifm-menu-color: var(--nav-text);
+  --ifm-menu-color-active: var(--cyan);
+  --ifm-menu-color-background-active: var(--cyan-soft);
+  --ifm-menu-color-background-hover: var(--tint-05);
+  --ifm-footer-background-color: transparent;
+  --ifm-footer-color: var(--muted);
+  --ifm-footer-link-color: var(--muted);
   --ifm-code-font-size: 95%;
-  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.1);
+  --docusaurus-highlighted-code-line-bg: var(--tint-08);
 }
 
-[data-theme='dark'] {
-  --ifm-color-primary: #6fa4ff;
-  --ifm-color-primary-dark: #4d8eff;
-  --ifm-color-primary-darker: #3c83ff;
-  --ifm-color-primary-darkest: #0f62ff;
-  --ifm-color-primary-light: #91baff;
-  --ifm-color-primary-lighter: #a2c5ff;
-  --ifm-color-primary-lightest: #d4e4ff;
-  --ifm-background-color: #0e1116;
-  --ifm-background-surface-color: #151922;
-  --docusaurus-highlighted-code-line-bg: rgba(255, 255, 255, 0.08);
+/* Light theme: the frontend accent (#077f97) is 4.2:1 on the page background,
+   under WCAG AA for text. Use a slightly darker teal for links and active items. */
+:root[data-theme="light"] {
+  --ifm-link-color: #066d83;
+  --ifm-menu-color-active: #066d83;
+}
+
+@media (max-width: 996px) {
+  :root {
+    --ifm-navbar-height: 60px;
+  }
+}
+
+/* Page background: shell gradient plus two glows, on a fixed layer so it does not scroll. */
+html {
+  background: var(--bg);
+}
+
+body {
+  background: transparent;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 80% 18%, var(--cyan-a12), transparent 38%),
+    radial-gradient(circle at 25% 85%, var(--shell-glow), transparent 40%),
+    var(--shell-gradient);
+}
+
+/* Navbar */
+.navbar {
+  -webkit-backdrop-filter: blur(24px);
+  backdrop-filter: blur(24px);
+  border-bottom: 1px solid var(--bar-line);
+  box-shadow: none;
+}
+
+.navbar__logo img {
+  border-radius: var(--radius-sm);
+  background: var(--logo-bg);
+  padding: 4px 10px;
+  box-sizing: content-box;
+}
+
+.navbar__link--active,
+.navbar__link:hover {
+  color: var(--cyan);
+}
+
+/* Sidebar */
+.theme-doc-sidebar-container {
+  border-right: 1px solid var(--bar-line) !important;
+}
+
+.menu__link {
+  border-radius: var(--radius-md);
+}
+
+.menu__link--active:not(.menu__link--sublist) {
+  background: var(--cyan-soft);
+  color: var(--cyan);
+}
+
+/* Footer: slim translucent bar */
+.footer {
+  background: var(--shell-bar-bg);
+  -webkit-backdrop-filter: blur(24px);
+  backdrop-filter: blur(24px);
+  border-top: 1px solid var(--bar-line);
+  --ifm-footer-title-color: var(--text);
+  padding: var(--space-6) var(--space-4);
+}
+
+.footer__copyright {
+  color: var(--muted);
+  font-size: var(--text-sm);
+}
+
+/* Content surfaces: panel look (14px radius, hairline, inset tint) */
+.theme-admonition,
+.theme-doc-markdown pre,
+[class*="codeBlockContainer"],
+.table-of-contents,
+.pagination-nav__link,
+.card,
+.markdown table {
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  background: var(--panel-bg);
+  box-shadow: inset 0 0 0 1px var(--tint-05);
+}
+
+.markdown table {
+  display: table;
+  overflow: hidden;
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+.markdown table tr,
+.markdown table tr:nth-child(2n) {
+  background: transparent;
+}
+
+.markdown table th,
+.markdown table td {
+  border-color: var(--line);
+}
+
+.pagination-nav__link:hover {
+  border-color: var(--line-strong);
+}
+
+.table-of-contents {
+  border-radius: var(--radius-md);
+}
+
+.breadcrumbs__link {
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  background: var(--surface-soft);
+}
+
+.breadcrumbs__item--active .breadcrumbs__link {
+  background: var(--cyan-soft);
+  color: var(--cyan);
+}
+
+/* Code */
+[class*="codeBlockContainer"] {
+  background: rgb(var(--base-rgb) / 0.6);
+  overflow: hidden;
+}
+
+:not(pre) > code {
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  background: var(--tint-05);
+}
+
+/* Admonitions: status colours with matching soft fill */
+.theme-admonition {
+  --adm: var(--cyan);
+  --adm-rgb: var(--accent-rgb);
+  border-left: 4px solid var(--adm);
+  background: rgb(var(--adm-rgb) / 0.1);
+}
+
+.theme-admonition-note {
+  --adm: var(--cyan);
+  --adm-rgb: var(--accent-rgb);
+}
+
+.theme-admonition-tip {
+  --adm: var(--teal);
+  --adm-rgb: var(--teal-rgb);
+}
+
+.theme-admonition-info {
+  --adm: var(--blue);
+  --adm-rgb: var(--blue-rgb);
+}
+
+.theme-admonition-warning,
+.theme-admonition-caution {
+  --adm: var(--warn);
+  --adm-rgb: var(--warn-rgb);
+}
+
+.theme-admonition-danger {
+  --adm: var(--danger);
+  --adm-rgb: var(--danger-rgb);
+}
+
+.theme-admonition [class*="admonitionHeading"] {
+  color: var(--adm);
+}
+
+.theme-admonition [class*="admonitionIcon"] svg {
+  fill: var(--adm);
+}
+
+/* Buttons: glow-outline style */
+.button {
+  font-size: var(--text-sm);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  transition:
+    box-shadow 0.15s ease,
+    border-color 0.15s ease;
+}
+
+.button--primary {
+  background: var(--surface-glow);
+  border: 1px solid var(--cyan-a45);
+  border-radius: 6px;
+  color: var(--text-bright);
+}
+
+.button--primary:hover {
+  background: var(--surface-glow);
+  border-color: var(--cyan-a55);
+  box-shadow: 0 0 16px var(--cyan-a30);
+  color: var(--text-bright);
+}
+
+.button--secondary {
+  background: transparent;
+  border: 1px solid rgb(var(--accent-rgb) / 0.28);
+  color: var(--cyan);
+}
+
+.button--secondary:hover {
+  background: var(--cyan-a06);
+  border-color: var(--cyan-a45);
+  box-shadow: 0 0 12px var(--cyan-a20);
+  color: var(--cyan);
 }

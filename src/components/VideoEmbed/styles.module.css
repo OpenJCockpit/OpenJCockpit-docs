@@ -23,8 +23,9 @@
   justify-content: center;
   padding: 1rem;
   text-align: center;
-  border: 2px dashed var(--ifm-color-emphasis-400);
+  border: 1px solid var(--line);
   border-radius: 8px;
+  background: var(--surface-soft);
   color: var(--ifm-color-emphasis-700);
 }
 

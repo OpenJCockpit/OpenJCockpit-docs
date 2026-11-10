@@ -1,12 +1,48 @@
 .heroBanner {
+  position: relative;
+  overflow: hidden;
   padding: 4rem 0;
   text-align: center;
+  background: transparent;
+  color: var(--text);
+}
+
+.puffs {
+  z-index: 0;
+}
+
+[data-theme="light"] .puffs {
+  opacity: 0.35 !important;
+}
+
+.heroContent {
+  position: relative;
+  z-index: 1;
+}
+
+.heroBanner :global(.hero__title) {
+  font-size: clamp(28px, 2.2vw + 12px, 40px);
+  font-weight: 650;
+  letter-spacing: -0.035em;
+}
+
+.heroBanner :global(.hero__subtitle) {
+  color: var(--muted);
+}
+
+.logoChip {
+  display: inline-block;
+  margin-bottom: 1.5rem;
+  padding: 10px 20px;
+  background: #fff;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow);
 }
 
 .logo {
-  max-width: 420px;
+  display: block;
+  max-width: 280px;
   width: 100%;
-  margin-bottom: 1rem;
 }
 
 .buttons {
@@ -15,4 +51,61 @@
   justify-content: center;
   gap: 1rem;
   flex-wrap: wrap;
+}
+
+.panel {
+  height: 100%;
+  margin-bottom: 1rem;
+  padding: 1.5rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  background: var(--panel-bg);
+  box-shadow: inset 0 0 0 1px var(--tint-05);
+  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(20px);
+}
+
+.panel h2,
+.panel h3 {
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.iconBox {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  margin-bottom: 1rem;
+  border: 1px solid var(--cyan-a35);
+  border-radius: var(--radius-md);
+  background: var(--cyan-soft);
+  color: var(--cyan);
+}
+
+.sectionTitle {
+  margin: 2rem 0 1rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.goals {
+  display: table;
+  width: 100%;
+  margin: 0;
+  border: 0;
+  background: transparent;
+}
+
+.goals tr,
+.goals th,
+.goals td {
+  border: 0;
+  background: transparent;
+}
+
+.goals th {
+  font-weight: 500;
+  text-align: left;
 }

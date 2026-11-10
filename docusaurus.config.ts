@@ -5,9 +5,13 @@ import type * as Preset from '@docusaurus/preset-classic';
 // This runs in Node.js - Don't use client-side code here (browser APIs, JSX...)
 
 const config: Config = {
-  title: 'OpenJCockpit Education',
+  title: 'OpenJCockpit Docs',
+  customFields: {
+    // Same ref the sync script uses for generated GitHub links.
+    productDocsRef: process.env.PRODUCT_DOCS_REF ?? 'main',
+  },
   clientModules: ['./src/clientModules/d3-transition.ts'],
-  tagline: 'Learn governed, spec-driven AI software development',
+  tagline: 'Learn, build and operate governed, spec-driven AI software development',
   favicon: 'img/OpenJCockpit_logo.png',
 
   future: {
@@ -15,15 +19,17 @@ const config: Config = {
   },
 
   url: 'https://openjcockpit.github.io',
-  baseUrl: '/openJCockpit-education/',
+  baseUrl: '/OpenJCockpit-docs/',
 
   organizationName: 'OpenJCockpit',
-  projectName: 'openJCockpit-education',
+  projectName: 'OpenJCockpit-docs',
   trailingSlash: false,
 
   // Dead links must fail the build.
   onBrokenLinks: 'throw',
   markdown: {
+    // Synced product docs are plain CommonMark; only .mdx files are parsed as MDX.
+    format: 'detect',
     mermaid: true,
     hooks: {
       onBrokenMarkdownLinks: 'throw',
@@ -42,7 +48,34 @@ const config: Config = {
       {
         hashed: true,
         indexBlog: true,
-        docsRouteBasePath: '/docs',
+        docsRouteBasePath: ['/learn', '/reference'],
+        docsDir: ['docs', 'reference'],
+      },
+    ],
+  ],
+
+  plugins: [
+    // Second docs instance: product reference documentation (synced from the
+    // OpenJCockpit repo in a later phase, see docs/EDUCATION_REBRAND_DOCUMENTATION_PLAN.md).
+    [
+      '@docusaurus/plugin-content-docs',
+      {
+        id: 'reference',
+        path: 'reference',
+        routeBasePath: 'reference',
+        sidebarPath: './sidebars-reference.ts',
+      },
+    ],
+    // Education pages moved from /docs/* to /learn/*; keep old links working.
+    [
+      '@docusaurus/plugin-client-redirects',
+      {
+        createRedirects(existingPath: string) {
+          if (existingPath === '/learn' || existingPath.startsWith('/learn/')) {
+            return [existingPath.replace(/^\/learn/, '/docs')];
+          }
+          return undefined;
+        },
       },
     ],
   ],
@@ -52,9 +85,10 @@ const config: Config = {
       'classic',
       {
         docs: {
+          routeBasePath: 'learn',
           sidebarPath: './sidebars.ts',
           editUrl:
-            'https://github.com/OpenJCockpit/openJCockpit-education/tree/main/',
+            'https://github.com/OpenJCockpit/OpenJCockpit-docs/tree/main/',
         },
         blog: {
           blogTitle: "What's new",
@@ -65,7 +99,7 @@ const config: Config = {
             xslt: true,
           },
           editUrl:
-            'https://github.com/OpenJCockpit/openJCockpit-education/tree/main/',
+            'https://github.com/OpenJCockpit/OpenJCockpit-docs/tree/main/',
           onInlineTags: 'warn',
           onInlineAuthors: 'warn',
           onUntruncatedBlogPosts: 'warn',
@@ -80,10 +114,11 @@ const config: Config = {
   themeConfig: {
     image: 'img/OpenJCockpit_logo_horizontal.png',
     colorMode: {
-      respectPrefersColorScheme: true,
+      defaultMode: 'dark',
+      respectPrefersColorScheme: false,
     },
     navbar: {
-      title: 'OpenJCockpit Education',
+      title: 'OpenJCockpit Docs',
       logo: {
         alt: 'OpenJCockpit logo',
         src: 'img/OpenJCockpit_logo.png',
@@ -95,12 +130,14 @@ const config: Config = {
           position: 'left',
           label: 'Learn',
         },
-        {to: '/blog', label: "What's new", position: 'left'},
         {
-          href: 'https://github.com/OpenJCockpit/OpenJCockpit/tree/main/docs/readme',
-          label: 'Product docs',
-          position: 'right',
+          type: 'docSidebar',
+          docsPluginId: 'reference',
+          sidebarId: 'referenceSidebar',
+          position: 'left',
+          label: 'Reference',
         },
+        {to: '/blog', label: "What's new", position: 'left'},
         {
           href: 'https://github.com/OpenJCockpit/OpenJCockpit',
           label: 'GitHub',
@@ -109,24 +146,24 @@ const config: Config = {
       ],
     },
     footer: {
-      style: 'dark',
+      style: 'light',
       links: [
         {
           title: 'Learn',
           items: [
-            {label: 'What is OpenJCockpit?', to: '/docs/intro'},
-            {label: 'Quickstart', to: '/docs/getting-started/quickstart'},
+            {label: 'What is OpenJCockpit?', to: '/learn/intro'},
+            {label: 'Quickstart', to: '/learn/getting-started/quickstart'},
           ],
+        },
+        {
+          title: 'Reference',
+          items: [{label: 'Product documentation', to: '/reference'}],
         },
         {
           title: 'OpenJCockpit',
           items: [
             {
-              label: 'Product documentation',
-              href: 'https://github.com/OpenJCockpit/OpenJCockpit/tree/main/docs/readme',
-            },
-            {
-              label: 'Docs site',
+              label: 'Project overview',
               href: 'https://openjcockpit.github.io/OpenJCockpit/',
             },
             {

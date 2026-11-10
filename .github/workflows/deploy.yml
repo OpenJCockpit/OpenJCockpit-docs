@@ -3,6 +3,12 @@ name: Deploy to GitHub Pages
 on:
   push:
     branches: [main]
+  # Sent by the OpenJCockpit repo when docs/readme/ changes.
+  repository_dispatch:
+    types: [product-docs-updated]
+  # Catches product doc changes if a dispatch was missed.
+  schedule:
+    - cron: "17 5 * * 1"
   workflow_dispatch:
 
 permissions:
@@ -14,16 +20,27 @@ concurrency:
   group: pages
   cancel-in-progress: true
 
+env:
+  PRODUCT_DOCS_REF: main
+  PRODUCT_DOCS_DIR: .product-docs
+
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
+      - name: Check out the product docs
+        uses: actions/checkout@v5
+        with:
+          repository: OpenJCockpit/OpenJCockpit
+          ref: ${{ env.PRODUCT_DOCS_REF }}
+          path: .product-docs
       - uses: actions/setup-node@v5
         with:
           node-version-file: .nvmrc
           cache: npm
       - run: npm ci
+      # The build runs scripts/sync-product-docs.mjs first (prebuild) and fails on dead links.
       - run: npm run build
       - uses: actions/upload-pages-artifact@v4
         with:

@@ -120,7 +120,7 @@ function Icon({ path }: { path: string }) {
 
 function HomepageHeader() {
   const { siteConfig } = useDocusaurusContext();
-  const logo = useBaseUrl("/img/OpenJCockpit_logo_horizontal.png");
+  const logo = useBaseUrl("/img/OpenJCockpit_logo_horizontal_560.png");
   return (
     <header className={clsx("hero", styles.heroBanner)}>
       <BrowserOnly>
@@ -135,6 +135,9 @@ function HomepageHeader() {
           <img
             className={styles.logo}
             src={logo}
+            width={560}
+            height={105}
+            fetchPriority="high"
             alt="OpenJCockpit, the open-source AI Software Factory"
           />
         </span>

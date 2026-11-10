@@ -16,7 +16,7 @@ const config: Config = {
   ],
   tagline:
     'Learn, build and operate governed, spec-driven AI software development',
-  favicon: 'img/OpenJCockpit_logo.png',
+  favicon: 'img/favicon.ico',
 
   future: {
     v4: true,
@@ -131,6 +131,11 @@ const config: Config = {
 
   // Runs before first paint so the sidebar entry does not flash. See src/clientModules/video-scripts-flag.ts.
   headTags: [
+    {tagName: 'link', attributes: {rel: 'icon', type: 'image/png', sizes: '32x32', href: '/OpenJCockpit-docs/img/favicon-32.png'}},
+    {tagName: 'link', attributes: {rel: 'icon', type: 'image/png', sizes: '192x192', href: '/OpenJCockpit-docs/img/icon-192.png'}},
+    {tagName: 'link', attributes: {rel: 'apple-touch-icon', href: '/OpenJCockpit-docs/img/apple-touch-icon.png'}},
+    {tagName: 'link', attributes: {rel: 'manifest', href: '/OpenJCockpit-docs/site.webmanifest'}},
+    {tagName: 'meta', attributes: {name: 'theme-color', content: '#0f1c3a'}},
     {
       tagName: 'script',
       attributes: {},
@@ -139,7 +144,7 @@ const config: Config = {
   ],
 
   themeConfig: {
-    image: 'img/OpenJCockpit_logo_horizontal.png',
+    image: 'img/social-card.png',
     colorMode: {
       defaultMode: 'dark',
       respectPrefersColorScheme: false,
@@ -148,7 +153,7 @@ const config: Config = {
       title: 'OpenJCockpit Docs',
       logo: {
         alt: 'OpenJCockpit logo',
-        src: 'img/OpenJCockpit_logo.png',
+        src: 'img/OpenJCockpit_logo_256.png',
       },
       items: [
         {

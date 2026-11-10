@@ -23,6 +23,22 @@ npm run lint       # Prettier and markdownlint
 npm run typecheck
 ```
 
+## Video scripts flag
+
+The video scripts are published but hidden. They only show up (sidebar entry, direct URLs) in a
+browser where this flag is set:
+
+```js
+localStorage.setItem("ojc:showVideoScripts", "true"); // then reload
+localStorage.removeItem("ojc:showVideoScripts"); // hide again
+```
+
+Shortcut: open any page with `?videoScripts=on` (or `?videoScripts=off`). Without the flag, the
+sidebar entry is hidden and direct visits to `/learn/video-scripts/...` redirect to the intro.
+
+This is not access control. The pages stay in the built site, the sitemap and the search index, and
+the files are in the repository. Anything truly private needs a private repo or a login.
+
 ## Product docs source
 
 The sync script reads a checkout of the OpenJCockpit repository:

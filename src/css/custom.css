@@ -265,3 +265,9 @@ body::before {
   box-shadow: 0 0 12px var(--cyan-a20);
   color: var(--cyan);
 }
+
+/* Video scripts are published but hidden unless the browser flag is set (see
+   src/clientModules/video-scripts-flag.ts). */
+html:not([data-video-scripts='on']) .sidebar-video-scripts {
+  display: none;
+}

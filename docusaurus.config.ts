@@ -10,8 +10,12 @@ const config: Config = {
     // Same ref the sync script uses for generated GitHub links.
     productDocsRef: process.env.PRODUCT_DOCS_REF ?? 'main',
   },
-  clientModules: ['./src/clientModules/d3-transition.ts'],
-  tagline: 'Learn, build and operate governed, spec-driven AI software development',
+  clientModules: [
+    './src/clientModules/d3-transition.ts',
+    './src/clientModules/video-scripts-flag.ts',
+  ],
+  tagline:
+    'Learn, build and operate governed, spec-driven AI software development',
   favicon: 'img/OpenJCockpit_logo.png',
 
   future: {
@@ -109,6 +113,15 @@ const config: Config = {
         },
       } satisfies Preset.Options,
     ],
+  ],
+
+  // Runs before first paint so the sidebar entry does not flash. See src/clientModules/video-scripts-flag.ts.
+  headTags: [
+    {
+      tagName: 'script',
+      attributes: {},
+      innerHTML: `(function(){try{var k='ojc:showVideoScripts',q=new URLSearchParams(location.search).get('videoScripts');if(q==='on')localStorage.setItem(k,'true');if(q==='off')localStorage.removeItem(k);if(localStorage.getItem(k)==='true')document.documentElement.setAttribute('data-video-scripts','on')}catch(e){}})()`,
+    },
   ],
 
   themeConfig: {

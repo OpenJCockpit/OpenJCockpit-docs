@@ -108,6 +108,20 @@ const config: Config = {
           onInlineAuthors: 'warn',
           onUntruncatedBlogPosts: 'warn',
         },
+        // Keep thin, duplicate or utility pages out of the sitemap. Video scripts also get
+        // noindex, see src/theme/DocItem/index.tsx.
+        sitemap: {
+          lastmod: 'date',
+          ignorePatterns: [
+            '**/learn/video-scripts/**',
+            '**/search',
+            '**/blog/tags',
+            '**/blog/tags/**',
+            '**/blog/authors',
+            '**/blog/archive',
+          ],
+          filename: 'sitemap.xml',
+        },
         theme: {
           customCss: './src/css/custom.css',
         },

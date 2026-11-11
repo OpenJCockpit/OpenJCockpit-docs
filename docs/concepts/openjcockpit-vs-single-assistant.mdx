@@ -25,18 +25,18 @@ reviewable branch, so your team can trust the outcome without having watched it 
 
 ## Side by side
 
-| Question                             | One assistant at your keyboard         | OpenJCockpit                                                       |
-| ------------------------------------ | -------------------------------------- | ------------------------------------------------------------------ |
-| Who decides what the agent may do?   | Whoever is running it, in the moment   | Policy as code, checked on every workflow start and every tool call |
-| Where does a human stay in the loop? | Wherever you happen to look            | Explicit approval gates: accept, deny or accept with comments      |
-| What is the input?                   | A prompt                               | A spec with requirements and acceptance criteria, kept in the repo |
-| How is the work structured?          | One conversation, one role             | A chain of specialised agents: analyst, architect, developer, QA   |
-| What is the output?                  | Edits in your working tree             | One branch per run with a checkpoint commit after every agent      |
-| What can you audit later?            | The chat history, if it was kept       | Recorded policy decisions and approval decisions                   |
-| Where do Git credentials live?       | Often on the machine running the tool  | Server-side only, never in anything a model sees                   |
-| What happens when a control fails?   | Depends on the tool                    | Controls fail closed: no decision means no action                  |
-| Can it work through a backlog?       | One session at a time                  | A per-project spec queue                                           |
-| Can you add your own roles?          | Limited to what the tool offers        | Agents are Markdown files you add to a workflow                    |
+| Question                             | One assistant at your keyboard        | OpenJCockpit                                                        |
+| ------------------------------------ | ------------------------------------- | ------------------------------------------------------------------- |
+| Who decides what the agent may do?   | Whoever is running it, in the moment  | Policy as code, checked on every workflow start and every tool call |
+| Where does a human stay in the loop? | Wherever you happen to look           | Explicit approval gates: accept, deny or accept with comments       |
+| What is the input?                   | A prompt                              | A spec with requirements and acceptance criteria, kept in the repo  |
+| How is the work structured?          | One conversation, one role            | A chain of specialised agents: analyst, architect, developer, QA    |
+| What is the output?                  | Edits in your working tree            | One branch per run with a checkpoint commit after every agent       |
+| What can you audit later?            | The chat history, if it was kept      | Recorded policy decisions and approval decisions                    |
+| Where do Git credentials live?       | Often on the machine running the tool | Server-side only, never in anything a model sees                    |
+| What happens when a control fails?   | Depends on the tool                   | Controls fail closed: no decision means no action                   |
+| Can it work through a backlog?       | One session at a time                 | A per-project spec queue                                            |
+| Can you add your own roles?          | Limited to what the tool offers       | Agents are Markdown files you add to a workflow                     |
 
 ## Why that matters
 

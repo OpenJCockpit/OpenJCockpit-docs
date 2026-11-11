@@ -18,22 +18,22 @@ never be exposed. Production uses the same images with stricter defaults. This p
 
 ## Two deployment profiles
 
-| Profile                    | Use it for                                    |
-| -------------------------- | --------------------------------------------- |
-| Kubernetes (preferred)     | Any cluster with an nginx ingress controller  |
-| VM or VPS                  | One Linux host with Docker Engine and Compose |
+| Profile                | Use it for                                    |
+| ---------------------- | --------------------------------------------- |
+| Kubernetes (preferred) | Any cluster with an nginx ingress controller  |
+| VM or VPS              | One Linux host with Docker Engine and Compose |
 
 ## What changes from local
 
-| Concern  | Local stack                         | Production                                                              |
-| -------- | ----------------------------------- | ----------------------------------------------------------------------- |
-| Users    | Seeded users with public passwords  | None. The realm has roles and clients only.                             |
-| Secrets  | Public placeholders                 | Your own, checked by `validate-env.sh` before deploy.                   |
-| Policy   | Optional and editable at runtime    | Mandatory, fail closed, and locked against runtime changes.             |
-| Network  | Many published ports                | VM: only 80 and 443. Kubernetes: default-deny network policies.         |
-| Docker   | Optional job containers             | Never mounted.                                                          |
-| Images   | Built locally                       | Immutable release tags. Never deploy `latest`.                          |
-| Logs     | Plain text                          | JSON on stdout, with actuator on a separate internal port.              |
+| Concern | Local stack                        | Production                                                      |
+| ------- | ---------------------------------- | --------------------------------------------------------------- |
+| Users   | Seeded users with public passwords | None. The realm has roles and clients only.                     |
+| Secrets | Public placeholders                | Your own, checked by `validate-env.sh` before deploy.           |
+| Policy  | Optional and editable at runtime   | Mandatory, fail closed, and locked against runtime changes.     |
+| Network | Many published ports               | VM: only 80 and 443. Kubernetes: default-deny network policies. |
+| Docker  | Optional job containers            | Never mounted.                                                  |
+| Images  | Built locally                      | Immutable release tags. Never deploy `latest`.                  |
+| Logs    | Plain text                         | JSON on stdout, with actuator on a separate internal port.      |
 
 ## The lifecycle at a glance
 

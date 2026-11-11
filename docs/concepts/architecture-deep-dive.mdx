@@ -41,7 +41,7 @@ flowchart LR
 
 ## Why two planes
 
-The workflow engine decides *which* agent runs, in what order, under which gates. The runtime runs it.
+The workflow engine decides _which_ agent runs, in what order, under which gates. The runtime runs it.
 They are separate processes that share no database, volume or in-memory object. Everything crosses an
 authenticated HTTP contract, and each side only accepts calls from the right Keycloak client.
 

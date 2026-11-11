@@ -71,6 +71,11 @@ You are a Code Reviewer in a software delivery team.
 
 (The download has the full instructions.) The front matter fields:
 
+<Checkpoint>
+  The file exists at <code>agents/code-reviewer.md</code> in your{" "}
+  <code>OpenJCockpit</code> checkout.
+</Checkpoint>
+
 | Field        | Meaning                                                                           |
 | ------------ | --------------------------------------------------------------------------------- |
 | `id`         | Required. Lowercase kebab-case, unique in the folder                              |
@@ -93,6 +98,11 @@ The `agents/` folder is mounted read-only at `/agents`. Open **Workflow design â
 
 In Workflow Design, copy **Implement spec** and add `local:code-reviewer` after the QA Engineer. Save
 it under a new name so the defaults stay untouched.
+
+<Checkpoint>
+  The saved workflow lists <code>local:code-reviewer</code> after the QA
+  Engineer, and <strong>Implement spec</strong> is unchanged.
+</Checkpoint>
 
 ### 4. Run it on spec 002
 
@@ -117,7 +127,8 @@ You can go further. Add a policy rule like the one in [policy as code](policy-as
 agents from another provider over the Agent2Agent (A2A) protocol. See the product docs on
 [agents and A2A](/reference/integrations/a2a-agents).
 
-Limits: A2A support is version 0.3 and `message/send` only. The default `agents/` folder is read-only
+Limits: agent runs are synchronous requests, so there is no streaming and an agent that is already running
+cannot be cancelled. A2A support is version 0.3 and `message/send` only. The default `agents/` folder is read-only
 inside the container, so edit files on the host.
 
 ## Troubleshooting

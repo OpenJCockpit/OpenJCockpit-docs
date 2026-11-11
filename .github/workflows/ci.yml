@@ -28,6 +28,10 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm run lint
+      # Fails when a product doc link cannot be resolved. The build runs it again via prebuild.
+      - run: npm run sync-docs
+        env:
+          PRODUCT_DOCS_DIR: .product-docs
       - run: npm run typecheck
       # onBrokenLinks and onBrokenMarkdownLinks are set to 'throw', so dead links fail the build.
       - run: npm run build

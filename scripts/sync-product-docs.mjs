@@ -218,7 +218,11 @@ sections.forEach((section, index) => {
   if (!fs.existsSync(dir)) return;
   fs.writeFileSync(
     path.join(dir, '_category_.json'),
-    JSON.stringify({label: section.label, position: index + 1}, null, 2) + '\n',
+    JSON.stringify(
+      {label: section.label, position: section.label === 'Archive' ? 99 : index + 1, collapsed: true},
+      null,
+      2,
+    ) + '\n',
   );
 });
 

@@ -126,8 +126,15 @@ branch without your review. Read more in the product docs on
 [spec-driven development](/reference/workflows/spec-driven-development)
 and [agents and workflows](/reference/workflows/agents-and-workflows).
 
-Relevant limitations: output varies from run to run on a local model, and the default workflows have no
-approval gate. See [known limitations](/reference/operations/known-limitations).
+Relevant limitations:
+
+- Output varies from run to run on a local model, and the default workflows have no approval gate.
+- Java projects are the primary focus; other languages are not yet a verified target.
+- An agent that is already running cannot be cancelled, and a run stops after `WORKFLOW_AGENT_TIMEOUT`.
+- There is no cost meter, rate limit or token budget.
+- Runs push a branch but never open a pull request, which is why step 6 is manual.
+
+See [known limitations](/reference/operations/known-limitations).
 
 ## Troubleshooting
 

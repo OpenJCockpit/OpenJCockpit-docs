@@ -86,10 +86,14 @@ Know the limits before you rely on this:
 
 - **Feedback loops cost money and time.** Each comment re-runs the agent. The default maximum is 3
   loops per gate (`APPROVAL_GATE_MAX_FEEDBACK_ITERATIONS`), and it is the only cost control.
-- **Any signed-in user can approve.** There is no role restriction on who may decide at a gate.
+- **Only approvers can decide.** Deciding needs the `openjcockpit-approver` role; viewers and operators
+  can read the gate but get `403` when they decide. Roles apply to every project of a deployment, not per
+  project.
 - **A job times out while waiting.** A run on a project stops after `WORKFLOW_AGENT_TIMEOUT`
   (3600 s locally), even while a gate is open.
 - **Runs that were executing during a restart are lost.** Only runs parked at a gate resume.
+- **A resumed gate does not pass its git token to a child workflow.** An orb-child workflow also does not
+  inherit the Git workspace.
 
 See the product [approval gates runbook](/reference/governance/approval-gates)
 and [known limitations](/reference/operations/known-limitations).
@@ -99,6 +103,7 @@ and [known limitations](/reference/operations/known-limitations).
 - The dashboard shows "run state lost": the service restarted while an agent was executing. Start the
   workflow again.
 - Accepting returns `409`: someone else already decided.
+- Accepting returns `403`: your user lacks the `openjcockpit-approver` role.
 
 ## Next steps
 

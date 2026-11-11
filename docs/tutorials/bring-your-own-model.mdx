@@ -58,6 +58,8 @@ ollama pull <model-tag>
 ollama list
 ```
 
+<Checkpoint>The new tag appears in the `ollama list` output.</Checkpoint>
+
 ### 2. Set the variable
 
 In `OpenJCockpit/.env`:
@@ -68,11 +70,19 @@ OLLAMA_MODEL=<model-tag>
 
 The value must exist in `ollama list`.
 
+<Checkpoint>
+  `OLLAMA_MODEL` in `.env` is set to a tag that `ollama list` shows.
+</Checkpoint>
+
 ### 3. Recreate the services that use it
 
 ```bash
 docker compose up -d litellm embabel-agent-runtime
 ```
+
+<Checkpoint>
+  `docker compose ps` lists both services as running, recreated just now.
+</Checkpoint>
 
 ### 4. Prove it reached the container
 
@@ -108,6 +118,9 @@ Treat a hosted variant as a separate tutorial, once it has been tried and verifi
 You changed which model answers without touching any agent. That is the point of aliases. It also means
 a weaker model changes every agent at once, so re-run your specs and review the branches the same way.
 
+There is no automatic fallback between providers, so if the new model fails, switch back by hand. Health
+stays `UP` even when inference does not work.
+
 Read more in the product
 [LLM providers](/reference/integrations/llm-providers).
 
@@ -122,5 +135,5 @@ Read more in the product
 
 ## Next steps
 
-You have now seen all eight pieces. Read the [glossary](../concepts/glossary.md), and revisit the
+You have now seen all eight pieces. Read the [glossary](../concepts/glossary.mdx), and revisit the
 [policy tutorial](policy-as-code.mdx) to govern your new agent.

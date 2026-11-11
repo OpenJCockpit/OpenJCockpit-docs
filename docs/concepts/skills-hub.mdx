@@ -1,0 +1,56 @@
+---
+title: "Skills Hub and skills marketplace in OpenJCockpit"
+sidebar_label: Skills Hub
+description: What a skill is, why it never grants tools, and what the early marketplace integration can and cannot do today.
+sidebar_position: 5
+estimated_time: 8 minutes
+difficulty: intermediate
+openjcockpit_version: v0.1.5
+---
+
+# Skills Hub
+
+A **skill** is a reusable instruction package an agent can load, in the Agent Skills format. It is a
+`skills/<id>/SKILL.md` file with optional text references. The Skills Hub in the dashboard lists them.
+
+<VersionBanner version="v0.1.5 (draft)" />
+
+## What a skill does, and does not do
+
+- A skill adds instructions and reference text to an agent, such as how to look up a customer.
+- A skill **never grants a tool**. An `allowed-tools` entry in a skill, or text in its instructions, is
+  ignored for tool access. Tools come from the agent definition and the tenant binding, and each call is
+  policy-checked.
+
+That keeps installing a skill from becoming a way to widen what an agent may do.
+
+## Local skills
+
+Skills for configuration-driven agents live next to the agent definitions and ship in the runtime image.
+An agent lists the skill ids it wants in its front matter.
+
+## The marketplace is an early placeholder
+
+The Skills Hub can list skills from registered marketplace connections. Be clear about the state of this:
+
+- The wire contract is a placeholder (`GET {url}/skills` returning `{name, description}` items).
+- No real marketplace vendor exists yet.
+- The repository ships a mock marketplace for clicking through the feature. It is development-only and
+  not part of the default stack.
+- Outbound calls have timeouts, size caps and an egress guard that blocks private and cloud-metadata
+  addresses by default.
+
+<LocalOnlyWarning />
+
+Never enable `SKILLS_MARKETPLACE_ALLOW_PRIVATE_EGRESS` outside local development.
+
+## Known snag
+
+Register the marketplace's base URL. The service appends `/skills` itself, so a URL that already ends in
+`/skills` is requested as `/skills/skills`.
+
+## Go deeper
+
+- [Skills Hub reference](/reference/integrations/skills-marketplace), with all `SKILLS_MARKETPLACE_*` settings.
+- [A2A agents](a2a-agents.mdx).
+- [Security considerations](/reference/governance/security-considerations).

@@ -25,7 +25,16 @@ const sidebars: SidebarsConfig = {
     {
       type: 'category',
       label: 'Concepts',
-      items: ['concepts/credential-isolation', 'concepts/glossary'],
+      items: [
+        'concepts/credential-isolation',
+        'concepts/architecture-deep-dive',
+        'concepts/a2a-agents',
+        'concepts/skills-hub',
+        'concepts/spec-queue-and-chaining',
+        'concepts/production-operations',
+        'concepts/openjcockpit-vs-single-assistant',
+        'concepts/glossary',
+      ],
     },
     {
       type: 'category',

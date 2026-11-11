@@ -37,3 +37,5 @@ jobs:
       - run: npm run build
         env:
           PRODUCT_DOCS_DIR: .product-docs
+      # Checks anchors and asset links in the built HTML, which the Docusaurus link checks do not cover.
+      - run: npm run check-links

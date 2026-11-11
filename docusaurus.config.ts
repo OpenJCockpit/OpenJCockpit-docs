@@ -13,6 +13,7 @@ const config: Config = {
   clientModules: [
     './src/clientModules/d3-transition.ts',
     './src/clientModules/video-scripts-flag.ts',
+    './src/clientModules/zoom.ts',
   ],
   tagline:
     'Learn, build and operate governed, spec-driven AI software development',

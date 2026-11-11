@@ -271,3 +271,60 @@ body::before {
 html:not([data-video-scripts='on']) .sidebar-video-scripts {
   display: none;
 }
+
+/* Click-to-zoom (src/clientModules/zoom.ts) */
+.markdown .docusaurus-mermaid-container,
+.markdown img {
+  cursor: zoom-in;
+}
+.ojc-zoom-open {
+  overflow: hidden;
+}
+.ojc-zoom-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* --ifm-background-color is transparent in this theme; the lightbox needs an opaque backdrop. */
+  background: var(--bg);
+  cursor: grab;
+  touch-action: none;
+  user-select: none;
+}
+.ojc-zoom-stage {
+  width: 92vw;
+  height: 88vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform-origin: center;
+}
+.ojc-zoom-stage > img,
+.ojc-zoom-stage > svg {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  pointer-events: none;
+}
+.ojc-zoom-bar {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  display: flex;
+  gap: 0.5rem;
+}
+.ojc-zoom-bar button {
+  min-width: 2.5rem;
+  height: 2.5rem;
+  border: 1px solid var(--ifm-color-emphasis-300);
+  border-radius: 0.5rem;
+  background: var(--ifm-background-surface-color);
+  color: var(--ifm-font-color-base);
+  font-size: 1rem;
+  cursor: pointer;
+}
+.ojc-zoom-bar button:hover {
+  border-color: var(--ifm-color-primary);
+}

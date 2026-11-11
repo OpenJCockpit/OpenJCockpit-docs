@@ -1,0 +1,71 @@
+---
+title: "OpenJCockpit vs. a single AI coding assistant: what governance adds"
+sidebar_label: vs. a single coding assistant
+description: Why a governed, multi-agent workflow gives you changes you can trust, trace and review, which a single coding assistant cannot.
+sidebar_position: 8
+estimated_time: 6 minutes
+difficulty: beginner
+openjcockpit_version: v0.1.5
+---
+
+# OpenJCockpit vs. a single coding assistant
+
+Most people already know that AI can write code. The hard part is making it **trustworthy**: knowing
+what it was allowed to do, who approved it, and being able to review the result like any other change.
+That is the gap OpenJCockpit is built to close.
+
+<VersionBanner version="v0.1.5 (draft)" />
+
+## The difference in one line
+
+A single assistant helps **you** write code. OpenJCockpit runs a **governed process** that delivers a
+reviewable branch, so your team can trust the outcome without having watched it happen.
+
+> idea → spec → agent workflow → policy check → approval gate → reviewable Git branch → PR
+
+## Side by side
+
+| Question                             | One assistant at your keyboard        | OpenJCockpit                                                        |
+| ------------------------------------ | ------------------------------------- | ------------------------------------------------------------------- |
+| Who decides what the agent may do?   | Whoever is running it, in the moment  | Policy as code, checked on every workflow start and every tool call |
+| Where does a human stay in the loop? | Wherever you happen to look           | Explicit approval gates: accept, deny or accept with comments       |
+| What is the input?                   | A prompt                              | A spec with requirements and acceptance criteria, kept in the repo  |
+| How is the work structured?          | One conversation, one role            | A chain of specialised agents: analyst, architect, developer, QA    |
+| What is the output?                  | Edits in your working tree            | One branch per run with a checkpoint commit after every agent       |
+| What can you audit later?            | The chat history, if it was kept      | Recorded policy decisions and approval decisions                    |
+| Where do Git credentials live?       | Often on the machine running the tool | Server-side only, never in anything a model sees                    |
+| What happens when a control fails?   | Depends on the tool                   | Controls fail closed: no decision means no action                   |
+| Can it work through a backlog?       | One session at a time                 | A per-project spec queue                                            |
+| Can you add your own roles?          | Limited to what the tool offers       | Agents are Markdown files you add to a workflow                     |
+
+## Why that matters
+
+- **Trust is built in, not bolted on.** Rules are enforced by policy, not by hoping the prompt was followed.
+  A tool call that policy does not allow does not run.
+- **Reviews stay normal.** Agent work arrives as a branch with a commit per agent, so your reviewers use
+  the tools they already have.
+- **Specs make runs repeatable.** The same spec, with the same acceptance criteria, is the contract for
+  every run. Quality is checked by a QA agent and by a human at the gate.
+- **It scales past one person.** Policy, gates and audit are shared by the whole team instead of living in
+  one developer's session.
+- **You keep control of your models.** Run local models, hosted models or both behind the same aliases.
+
+## Where a single assistant still fits
+
+OpenJCockpit does not replace the quick back-and-forth of pair programming. For a throwaway prototype or a
+one-line fix, an assistant at your keyboard is faster. Many teams will use both: an assistant for
+day-to-day coding, and OpenJCockpit for the changes that need to be traced, approved and reviewed.
+
+## Honest status
+
+- OpenJCockpit is under active development and Java-first. Other languages are not a verified target yet.
+- The default workflows push a branch. They do not open a pull request automatically.
+- Governance does not make a model correct. That is why the QA agent and the approval gates exist.
+
+## Go deeper
+
+- [Overview](/reference/concepts/overview)
+- [Policy as code](../tutorials/policy-as-code.mdx)
+- [Approval gates](../tutorials/approval-gates.mdx)
+- [Why agents never see your Git credentials](credential-isolation.mdx)
+- [Known limitations](/reference/operations/known-limitations)

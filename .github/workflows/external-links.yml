@@ -1,0 +1,31 @@
+name: External links
+
+# Outbound links break for reasons outside this repo, so this never blocks PRs.
+on:
+  schedule:
+    - cron: "0 6 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  external-links:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - name: Check out the product docs
+        uses: actions/checkout@v5
+        with:
+          repository: OpenJCockpit/OpenJCockpit
+          ref: main
+          path: .product-docs
+      - uses: actions/setup-node@v5
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+        env:
+          PRODUCT_DOCS_DIR: .product-docs
+      - run: npm run check-links:external

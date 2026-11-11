@@ -118,6 +118,55 @@ function transformBody(body, srcAbs, srcRel) {
     .join('\n');
 }
 
+// Reference pages whose H1 collides with a Learn page. The title is differentiated for search;
+// sidebar_label keeps the sidebar short.
+const titleOverrides = {
+  'getting-started/quickstart.md': {title: 'Install and run OpenJCockpit (product reference)', label: 'Quickstart'},
+  'operations/troubleshooting.md': {title: 'OpenJCockpit troubleshooting reference: common errors and fixes', label: 'Troubleshooting'},
+};
+
+const MAX_DESCRIPTION = 155;
+
+function stripMarkdown(s) {
+  return s
+    .replace(/!\[([^\]]*)\]\([^)]*\)/g, '$1')
+    .replace(/\[([^\]]+)\]\([^)]*\)/g, '$1')
+    .replace(/\[([^\]]+)\]\[[^\]]*\]/g, '$1')
+    .replace(/<[^>]+>/g, '')
+    .replace(/[`*_]/g, '')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+// First prose paragraph after the H1, cut at a sentence boundary (or a word boundary) under MAX_DESCRIPTION.
+function deriveDescription(text) {
+  const lines = text.split('\n');
+  let i = lines.findIndex((l) => /^# /.test(l)) + 1;
+  let inFence = false;
+  const para = [];
+  for (; i < lines.length; i += 1) {
+    const line = lines[i];
+    if (/^\s*(```|~~~)/.test(line)) {
+      inFence = !inFence;
+      continue;
+    }
+    const skip = inFence || /^\s*(#|>|[-*+] |\d+[.)] |\||<|\[[^\]]+\]:)/.test(line);
+    if (!line.trim() || skip) {
+      if (para.length) break;
+      continue;
+    }
+    para.push(line.trim());
+  }
+  const plain = stripMarkdown(para.join(' '));
+  if (!plain) return '';
+  if (plain.length <= MAX_DESCRIPTION) return plain;
+  const head = plain.slice(0, MAX_DESCRIPTION + 1);
+  const sentence = head.match(/^(.*[.!?])\s/);
+  if (sentence && sentence[1].length >= 60) return sentence[1];
+  const cut = head.slice(0, head.lastIndexOf(' ')).replace(/[\s,;:(-]+$/, '');
+  return `${cut}...`;
+}
+
 const readme = fs.readFileSync(path.join(docsRoot, 'README.md'), 'utf8');
 const {sections, pagePosition} = parseStructure(readme);
 
@@ -141,10 +190,15 @@ for (const srcAbs of files) {
   const position = isRoot ? 0 : (pagePosition.get(srcRel) ?? 99);
   if (!isRoot && !pagePosition.has(srcRel)) console.warn(`sync-product-docs: ${srcRel} is not listed in README "All pages"`);
 
+  const h1Title = h1[1].replace(/`/g, '').trim();
+  const override = titleOverrides[srcRel];
+  const description = deriveDescription(text);
   const front = [
     '---',
-    `title: ${JSON.stringify(h1[1].replace(/`/g, '').trim())}`,
+    `title: ${JSON.stringify(override?.title ?? h1Title)}`,
+    ...(description ? [`description: ${JSON.stringify(description)}`] : []),
     ...(isRoot ? ['slug: /', 'sidebar_label: Overview'] : []),
+    ...(override ? [`sidebar_label: ${JSON.stringify(override.label)}`] : []),
     `sidebar_position: ${position}`,
     `custom_edit_url: ${JSON.stringify(`${github}/edit/${ref}/docs/readme/${srcRel}`)}`,
     '---',
@@ -164,7 +218,11 @@ sections.forEach((section, index) => {
   if (!fs.existsSync(dir)) return;
   fs.writeFileSync(
     path.join(dir, '_category_.json'),
-    JSON.stringify({label: section.label, position: index + 1}, null, 2) + '\n',
+    JSON.stringify(
+      {label: section.label, position: section.label === 'Archive' ? 99 : index + 1, collapsed: true},
+      null,
+      2,
+    ) + '\n',
   );
 });
 

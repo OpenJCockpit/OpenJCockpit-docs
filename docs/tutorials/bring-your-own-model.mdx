@@ -1,10 +1,11 @@
 ---
-title: Bring your own model
+title: "Bring your own model: switch the Ollama model every agent uses"
+sidebar_label: Bring your own model
 description: Switch the local Ollama model that every agent uses, and understand what a hosted model would change.
 sidebar_position: 6
 estimated_time: 20 minutes
 difficulty: intermediate
-openjcockpit_version: develop
+openjcockpit_version: v0.1.5
 ---
 
 # Bring your own model
@@ -27,14 +28,14 @@ change reached the gateway. You also learn why a hosted model is not a one-line 
   ]}
 />
 
-<VersionBanner version="develop (draft, not yet verified on a clean machine)" />
+<VersionBanner version="v0.1.5 (draft, not yet verified on a clean machine)" />
 <ModelNote />
 
 <WrittenAndVideo videoTitle="Bring your own model">
 
 ## How models are wired
 
-Agents never name a model directly. They name an **alias** such as `agent-chat`, and the LiteLLM
+Agents never name a model directly. They name an **[alias](/learn/concepts/glossary#alias-model)** such as `agent-chat`, and the [LiteLLM](/learn/concepts/glossary#litellm)
 gateway maps each alias to an upstream model.
 
 ```mermaid
@@ -57,6 +58,8 @@ ollama pull <model-tag>
 ollama list
 ```
 
+<Checkpoint>The new tag appears in the `ollama list` output.</Checkpoint>
+
 ### 2. Set the variable
 
 In `OpenJCockpit/.env`:
@@ -67,11 +70,19 @@ OLLAMA_MODEL=<model-tag>
 
 The value must exist in `ollama list`.
 
+<Checkpoint>
+  `OLLAMA_MODEL` in `.env` is set to a tag that `ollama list` shows.
+</Checkpoint>
+
 ### 3. Recreate the services that use it
 
 ```bash
 docker compose up -d litellm embabel-agent-runtime
 ```
+
+<Checkpoint>
+  `docker compose ps` lists both services as running, recreated just now.
+</Checkpoint>
 
 ### 4. Prove it reached the container
 
@@ -107,6 +118,9 @@ Treat a hosted variant as a separate tutorial, once it has been tried and verifi
 You changed which model answers without touching any agent. That is the point of aliases. It also means
 a weaker model changes every agent at once, so re-run your specs and review the branches the same way.
 
+There is no automatic fallback between providers, so if the new model fails, switch back by hand. Health
+stays `UP` even when inference does not work.
+
 Read more in the product
 [LLM providers](/reference/integrations/llm-providers).
 
@@ -121,5 +135,5 @@ Read more in the product
 
 ## Next steps
 
-You have now seen all eight pieces. Read the [glossary](../concepts/glossary.md), and revisit the
+You have now seen all eight pieces. Read the [glossary](../concepts/glossary.mdx), and revisit the
 [policy tutorial](policy-as-code.mdx) to govern your new agent.

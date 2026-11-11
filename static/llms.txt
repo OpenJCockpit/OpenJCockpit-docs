@@ -1,0 +1,26 @@
+# OpenJCockpit Docs
+
+> Documentation for OpenJCockpit, an open-source AI Software Factory for governed, spec-driven software development with teams of AI agents, OPA policy checks, human approval gates and reviewable Git delivery.
+
+## Learn
+
+- [What is OpenJCockpit?](https://openjcockpit.github.io/OpenJCockpit-docs/learn/intro): five-minute introduction
+- [Quickstart](https://openjcockpit.github.io/OpenJCockpit-docs/learn/getting-started/quickstart): run the stack locally with Docker Compose and Ollama
+- [Troubleshooting](https://openjcockpit.github.io/OpenJCockpit-docs/learn/getting-started/troubleshooting): common start-up and first-run problems
+
+## Tutorials
+
+- [Your first spec-driven change](https://openjcockpit.github.io/OpenJCockpit-docs/learn/tutorials/first-spec-driven-change)
+- [Approval gates](https://openjcockpit.github.io/OpenJCockpit-docs/learn/tutorials/approval-gates)
+- [Policy as code with OPA](https://openjcockpit.github.io/OpenJCockpit-docs/learn/tutorials/policy-as-code)
+- [Build a custom agent](https://openjcockpit.github.io/OpenJCockpit-docs/learn/tutorials/custom-agent)
+- [Bring your own model](https://openjcockpit.github.io/OpenJCockpit-docs/learn/tutorials/bring-your-own-model)
+
+## Concepts
+
+- [Why agents never see your Git credentials](https://openjcockpit.github.io/OpenJCockpit-docs/learn/concepts/credential-isolation)
+- [Glossary](https://openjcockpit.github.io/OpenJCockpit-docs/learn/concepts/glossary)
+
+## Reference
+
+- [Product reference](https://openjcockpit.github.io/OpenJCockpit-docs/reference): the concise reference for installing, operating and governing OpenJCockpit

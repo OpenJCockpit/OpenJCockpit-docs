@@ -1,0 +1,63 @@
+---
+title: "Running OpenJCockpit in production: what changes from the local stack"
+sidebar_label: Production operations
+description: A map of how the production profiles differ from the local development stack, and where the runbooks live.
+sidebar_position: 7
+estimated_time: 12 minutes
+difficulty: advanced
+openjcockpit_version: v0.1.5
+---
+
+# Production operations
+
+The local stack you used in the [quickstart](../getting-started/quickstart.mdx) is for development and must
+never be exposed. Production uses the same images with stricter defaults. This page is the map. The
+[production runbook](/reference/operations/production-runbook) has the commands.
+
+<VersionBanner version="v0.1.5 (draft)" />
+
+## Two deployment profiles
+
+| Profile                | Use it for                                    |
+| ---------------------- | --------------------------------------------- |
+| Kubernetes (preferred) | Any cluster with an nginx ingress controller  |
+| VM or VPS              | One Linux host with Docker Engine and Compose |
+
+## What changes from local
+
+| Concern | Local stack                        | Production                                                      |
+| ------- | ---------------------------------- | --------------------------------------------------------------- |
+| Users   | Seeded users with public passwords | None. The realm has roles and clients only.                     |
+| Secrets | Public placeholders                | Your own, checked by `validate-env.sh` before deploy.           |
+| Policy  | Optional and editable at runtime   | Mandatory, fail closed, and locked against runtime changes.     |
+| Network | Many published ports               | VM: only 80 and 443. Kubernetes: default-deny network policies. |
+| Docker  | Optional job containers            | Never mounted.                                                  |
+| Images  | Built locally                      | Immutable release tags. Never deploy `latest`.                  |
+| Logs    | Plain text                         | JSON on stdout, with actuator on a separate internal port.      |
+
+## The lifecycle at a glance
+
+1. **Configure.** Fill every required value and validate the file.
+2. **Install** with the profile's deploy script.
+3. **Upgrade** by release tag, and **roll back** the same way.
+4. **Back up** the databases and the audit volumes.
+5. **Monitor** with the shipped alert rules, and learn the response for each alert.
+6. **Rotate secrets** on a schedule.
+
+## Things that surprise people
+
+- `OPENAI_API_KEY` is still required by the services, even for local-model setups.
+- `embabel-agent-service` and `ai-control-service` run as **single replicas**.
+- Runs paused at an approval gate survive a restart. Runs that are executing an agent do not.
+- There are no per-project roles. Roles apply to every project in a deployment.
+- `git-mcp-server` has no authentication of its own. It must stay on the internal network.
+
+Read the full [known limitations](/reference/operations/known-limitations) before you plan capacity or
+promise anything to your team.
+
+## Go deeper
+
+- [Production runbook](/reference/operations/production-runbook)
+- [Operations runbooks](/reference/operations/runbooks), for ports, volumes and logs
+- [Running the agent runtime on another host](/reference/operations/remote-agent-runtime)
+- [Security considerations](/reference/governance/security-considerations)

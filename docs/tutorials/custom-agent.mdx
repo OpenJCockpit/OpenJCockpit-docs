@@ -1,17 +1,18 @@
 ---
-title: Build a custom agent
+title: "Build a custom AI agent in Markdown"
+sidebar_label: Build a custom agent
 description: Define a read-only Code Reviewer agent in Markdown and add it to a workflow.
 sidebar_position: 5
 estimated_time: 30 minutes
 difficulty: intermediate
-openjcockpit_version: develop
+openjcockpit_version: v0.1.5
 ---
 
 # Build a custom agent
 
 ## What you will build
 
-You will write a **Code Reviewer** agent as one Markdown file, see it appear in the agent catalogue, and
+You will write a **Code Reviewer** AI agent as one Markdown file, see it appear in the [agent catalogue](/learn/concepts/glossary#agent-catalogue), and
 add it to a workflow after the QA Engineer. It reads the change and reports findings, and cannot change
 any file.
 
@@ -32,7 +33,7 @@ any file.
   ]}
 />
 
-<VersionBanner version="develop (draft, not yet verified on a clean machine)" />
+<VersionBanner version="v0.1.5 (draft, not yet verified on a clean machine)" />
 <ModelNote />
 
 <WrittenAndVideo videoTitle="Build a custom agent in ten minutes">
@@ -70,6 +71,11 @@ You are a Code Reviewer in a software delivery team.
 
 (The download has the full instructions.) The front matter fields:
 
+<Checkpoint>
+  The file exists at <code>agents/code-reviewer.md</code> in your{" "}
+  <code>OpenJCockpit</code> checkout.
+</Checkpoint>
+
 | Field        | Meaning                                                                           |
 | ------------ | --------------------------------------------------------------------------------- |
 | `id`         | Required. Lowercase kebab-case, unique in the folder                              |
@@ -92,6 +98,11 @@ The `agents/` folder is mounted read-only at `/agents`. Open **Workflow design â
 
 In Workflow Design, copy **Implement spec** and add `local:code-reviewer` after the QA Engineer. Save
 it under a new name so the defaults stay untouched.
+
+<Checkpoint>
+  The saved workflow lists <code>local:code-reviewer</code> after the QA
+  Engineer, and <strong>Implement spec</strong> is unchanged.
+</Checkpoint>
 
 ### 4. Run it on spec 002
 
@@ -116,7 +127,8 @@ You can go further. Add a policy rule like the one in [policy as code](policy-as
 agents from another provider over the Agent2Agent (A2A) protocol. See the product docs on
 [agents and A2A](/reference/integrations/a2a-agents).
 
-Limits: A2A support is version 0.3 and `message/send` only. The default `agents/` folder is read-only
+Limits: agent runs are synchronous requests, so there is no streaming and an agent that is already running
+cannot be cancelled. A2A support is version 0.3 and `message/send` only. The default `agents/` folder is read-only
 inside the container, so edit files on the host.
 
 ## Troubleshooting

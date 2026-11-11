@@ -11,9 +11,6 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node: [22, 24]
     steps:
       - uses: actions/checkout@v5
       - name: Check out the product docs
@@ -24,7 +21,7 @@ jobs:
           path: .product-docs
       - uses: actions/setup-node@v5
         with:
-          node-version: ${{ matrix.node }}
+          node-version-file: .nvmrc
           cache: npm
       - run: npm ci
       - run: npm run lint

@@ -5,7 +5,7 @@
 // External (opt-in with --external): http(s) links are requested with retries.
 //
 // Usage: node scripts/check-links.mjs [--external] [--build-dir build]
-//        [--base-url /OpenJCockpit-docs/] [--concurrency 8] [--timeout 15000]
+//        [--base-url /] [--concurrency 8] [--timeout 15000]
 // Run `npm run build` first. Exits 1 when a broken link is found.
 import { existsSync, readFileSync, readdirSync, statSync } from "node:fs";
 import { join, relative, resolve, posix } from "node:path";
@@ -18,7 +18,7 @@ const opt = (name, fallback) => {
 };
 
 const buildDir = resolve(opt("build-dir", "build"));
-const baseUrl = opt("base-url", "/OpenJCockpit-docs/");
+const baseUrl = opt("base-url", "/");
 const basePrefix = baseUrl.replace(/\/$/, "");
 const checkExternal = flag("external");
 const concurrency = Number(opt("concurrency", "8"));

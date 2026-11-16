@@ -24,7 +24,7 @@ const config: Config = {
   },
 
   url: 'https://openjcockpit.github.io',
-  baseUrl: '/OpenJCockpit-docs/',
+  baseUrl: '/',
 
   organizationName: 'OpenJCockpit',
   projectName: 'OpenJCockpit-docs',
@@ -133,10 +133,10 @@ const config: Config = {
 
   // Runs before first paint so the sidebar entry does not flash. See src/clientModules/video-scripts-flag.ts.
   headTags: [
-    {tagName: 'link', attributes: {rel: 'icon', type: 'image/png', sizes: '32x32', href: '/OpenJCockpit-docs/img/favicon-32.png'}},
-    {tagName: 'link', attributes: {rel: 'icon', type: 'image/png', sizes: '192x192', href: '/OpenJCockpit-docs/img/icon-192.png'}},
-    {tagName: 'link', attributes: {rel: 'apple-touch-icon', href: '/OpenJCockpit-docs/img/apple-touch-icon.png'}},
-    {tagName: 'link', attributes: {rel: 'manifest', href: '/OpenJCockpit-docs/site.webmanifest'}},
+    {tagName: 'link', attributes: {rel: 'icon', type: 'image/png', sizes: '32x32', href: '/img/favicon-32.png'}},
+    {tagName: 'link', attributes: {rel: 'icon', type: 'image/png', sizes: '192x192', href: '/img/icon-192.png'}},
+    {tagName: 'link', attributes: {rel: 'apple-touch-icon', href: '/img/apple-touch-icon.png'}},
+    {tagName: 'link', attributes: {rel: 'manifest', href: '/site.webmanifest'}},
     {tagName: 'meta', attributes: {name: 'theme-color', content: '#0f1c3a'}},
     {
       tagName: 'script',

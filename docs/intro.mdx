@@ -4,7 +4,7 @@ description: A five-minute introduction to OpenJCockpit, the open-source AI Soft
 sidebar_position: 1
 estimated_time: 5 minutes
 difficulty: beginner
-openjcockpit_version: develop
+openjcockpit_version: v0.1.5
 ---
 
 # What is OpenJCockpit?
@@ -16,7 +16,7 @@ policy checks, human approval gates and reviewable Git delivery built in.
 You decide what gets built, which agents may do what, and where a human must approve. The agents do
 the work in a branch you review.
 
-<VersionBanner version="develop" />
+<VersionBanner version="v0.1.5" />
 
 <WrittenAndVideo videoTitle="What is OpenJCockpit? (3 minutes)">
 
@@ -40,12 +40,12 @@ flowchart LR
 
 ## Four ideas to remember
 
-| Idea                  | What it means                                                                                               |
-| --------------------- | ----------------------------------------------------------------------------------------------------------- |
-| **Spec-driven**       | A specification in your repository is the contract. Agents implement it, and you review against it.         |
-| **Role-based agents** | Business analyst, solution architect, software developer and QA engineer each build on the previous output. |
-| **Governed**          | OPA policies decide what agents may do. Approval gates stop a run until a person decides.                   |
-| **Reviewable**        | Every run works on its own Git branch with checkpoint commits. Nothing lands without your review.           |
+| Idea                  | What it means                                                                                                                                                       |
+| --------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Spec-driven**       | A specification in your repository is the contract. Agents implement it, and you review against it.                                                                 |
+| **Role-based agents** | Business analyst, solution architect, software developer and QA engineer each build on the previous output.                                                         |
+| **Governed**          | [OPA](/learn/concepts/glossary#opa) policies decide what agents may do. [Approval gates](/learn/concepts/glossary#approval-gate) stop a run until a person decides. |
+| **Reviewable**        | Every run works on its own Git branch with checkpoint commits. Nothing lands without your review.                                                                   |
 
 </WrittenAndVideo>
 
@@ -54,7 +54,8 @@ flowchart LR
 - **Java developers** who want to try spec-driven agentic development on a real project. Start with
   the quickstart.
 - **Tech leads and architects** who care about governance and where humans stay in the loop. Start
-  with the tutorials on approval gates and policy as code (coming in a later phase).
+  with the tutorials on [approval gates](tutorials/approval-gates.mdx) and
+  [policy as code](tutorials/policy-as-code.mdx).
 
 ## Where to go next
 

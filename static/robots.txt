@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+
+# Enable once the custom domain is live (crawlers only read robots.txt at the domain root):
+# Sitemap: https://<DOMAIN>/sitemap.xml

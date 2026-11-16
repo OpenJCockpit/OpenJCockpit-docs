@@ -3,7 +3,7 @@
 Source of [OpenJCockpit Docs](https://openjcockpit.github.io/OpenJCockpit-docs/), built with
 [Docusaurus](https://docusaurus.io/). The site has two parts:
 
-- **Learn** (`docs/`, `/learn`): hand-written tutorials, concepts, workshops and video scripts that
+- **Learn** (`docs/`, `/learn`): hand-written tutorials, concepts and video scripts that
   teach governed, spec-driven AI software development with
   [OpenJCockpit](https://github.com/OpenJCockpit/OpenJCockpit).
 - **Reference** (`reference/`, `/reference`): the product documentation. It is **generated**: it is

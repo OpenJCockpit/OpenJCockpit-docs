@@ -34,3 +34,35 @@
   font-size: 0.875rem;
   color: var(--ifm-color-emphasis-700);
 }
+
+.expand {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  z-index: 2;
+  width: 2rem;
+  height: 2rem;
+  border: 0;
+  border-radius: 6px;
+  background: rgb(0 0 0 / 60%);
+  color: #fff;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.15s;
+}
+
+.frame:hover .expand,
+.expand:focus-visible,
+.expanded .expand {
+  opacity: 1;
+}
+
+.expanded {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  width: min(96vw, calc(94vh * 16 / 9));
+  margin: auto;
+  height: min(94vh, calc(96vw * 9 / 16));
+  box-shadow: 0 0 0 100vmax rgb(0 0 0 / 85%);
+}

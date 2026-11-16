@@ -11,9 +11,6 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node: [22, 24]
     steps:
       - uses: actions/checkout@v5
       - name: Check out the product docs
@@ -24,12 +21,18 @@ jobs:
           path: .product-docs
       - uses: actions/setup-node@v5
         with:
-          node-version: ${{ matrix.node }}
+          node-version-file: .nvmrc
           cache: npm
       - run: npm ci
       - run: npm run lint
+      # Fails when a product doc link cannot be resolved. The build runs it again via prebuild.
+      - run: npm run sync-docs
+        env:
+          PRODUCT_DOCS_DIR: .product-docs
       - run: npm run typecheck
       # onBrokenLinks and onBrokenMarkdownLinks are set to 'throw', so dead links fail the build.
       - run: npm run build
         env:
           PRODUCT_DOCS_DIR: .product-docs
+      # Checks anchors and asset links in the built HTML, which the Docusaurus link checks do not cover.
+      - run: npm run check-links
